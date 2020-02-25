@@ -3,7 +3,8 @@ let currentResult = defaultResult;
 let logEntries = [];
 
 function getUserNumberInput() {
-  return parseInt(userInput.value);
+  return userInput.value;
+  // return parseInt(userInput.value);
 }
 // Genereates and Writes Calculation log TO HTML PARTS
 function createAndWriteOutput(operator, resultBeforeCalc, calcNumber) {
@@ -31,8 +32,9 @@ function writeToLog(
 function add() {
   const enteredNumber = getUserNumberInput();
   const initialResult = currentResult;
+  console.log('INPUT' + enteredNumber, currentResult);
   currentResult += enteredNumber;
-  createAndWriteOutput('+', initialResult, enteredNumber);
+  createAndWriteOutput('+ ', initialResult, enteredNumber);
   writeToLog('ADD', initialResult, enteredNumber, currentResult);
 }
 
@@ -85,3 +87,6 @@ divideBtn.addEventListener('click', divide);
 // parseInt = STR =>> Int, parseFlo = Str =>> Floating Number
 // currentResult = currentResult + parseInt(userInput.value); aşağıdaki gibi de olabilir
 // currentResult = currentResult + +userInput.value; kısa versiyonu çok kullanılmaz
+// script tagı header a koy ve sonuna defer ekle
+// googlarken önce javascript yaz sonra birkaç keyword
+// birşey araştırırken mdn sitesini kullan
