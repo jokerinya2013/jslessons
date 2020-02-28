@@ -90,3 +90,4 @@ divideBtn.addEventListener('click', divide);
 // script tagı header a koy ve sonuna defer ekle
 // googlarken önce javascript yaz sonra birkaç keyword
 // birşey araştırırken mdn sitesini kullan
+// debugging özelliklerine baktık ve breakpoints ekledik.
