@@ -3,8 +3,8 @@ let currentResult = defaultResult;
 let logEntries = [];
 
 function getUserNumberInput() {
-  return userInput.value;
-  // return parseInt(userInput.value);
+  // return userInput.value;
+  return parseInt(userInput.value);
 }
 // Genereates and Writes Calculation log TO HTML PARTS
 function createAndWriteOutput(operator, resultBeforeCalc, calcNumber) {
@@ -29,41 +29,59 @@ function writeToLog(
   console.log(logEntries);
 }
 
-function add() {
+function calculateResult(calculationType) {
   const enteredNumber = getUserNumberInput();
   const initialResult = currentResult;
-  console.log('INPUT' + enteredNumber, currentResult);
-  currentResult += enteredNumber;
-  createAndWriteOutput('+ ', initialResult, enteredNumber);
-  writeToLog('ADD', initialResult, enteredNumber, currentResult);
+  let mathOperator;
+  if (calculationType === 'ADD') {
+    currentResult += enteredNumber;
+    mathOperator = '+';
+  } else if (calculationType === 'SUBTRACT') {
+    currentResult -= enteredNumber;
+    mathOperator = '-';
+  } else if (calculationType === 'MULTIPLY') {
+    currentResult *= enteredNumber;
+    mathOperator = '*';
+  } else if (calculationType === 'DIVIDE') {
+    currentResult /= enteredNumber;
+    mathOperator = '/';
+  }
+
+  if (
+    (calculationType !== 'ADD' &&
+      calculationType !== 'SUBTRACT' &&
+      calculationType !== 'MULTIPLY' &&
+      calculationType !== 'DIVIDE') ||
+    !enteredNumber // sıfır dışında true döner. Eksi sayılarda bile
+  ) {
+    return;
+  }
+  createAndWriteOutput(mathOperator, initialResult, enteredNumber);
+  writeToLog(calculationType, initialResult, enteredNumber, currentResult);
+}
+
+function add() {
+  calculateResult('ADD');
 }
 
 function subtract() {
-  const enteredNumber = getUserNumberInput();
-  const initialResult = currentResult;
-  currentResult -= enteredNumber;
-  createAndWriteOutput('-', initialResult, enteredNumber);
-  writeToLog('SUBTRACT', initialResult, enteredNumber, currentResult);
+  calculateResult('SUBTRACT');
 }
 
 function multiply() {
-  const enteredNumber = getUserNumberInput();
-  const initialResult = currentResult;
-  currentResult *= enteredNumber;
-  createAndWriteOutput('*', initialResult, enteredNumber);
-  writeToLog('MULTIPLY', initialResult, enteredNumber, currentResult);
+  calculateResult('MULTIPLY');
 }
 
 function divide() {
-  const enteredNumber = getUserNumberInput();
-  const initialResult = currentResult;
-  currentResult /= enteredNumber;
-  createAndWriteOutput('/', initialResult, enteredNumber);
-  writeToLog('DIVIDE', initialResult, enteredNumber, currentResult);
+  calculateResult('DIVIDE');
 }
 
 // currentResult = add(1, 2);
 // let calculationDescription = `(${defaultResult} + 10) * 3 / 2 - 1`;
+
+// addBtn.addEventListener('click', calculateResult('ADD'));
+// bu şekilde yazamayız çünkü parantezli olduğu için ilk önce hesaplama yapar.
+// event listener o yüzden PARANTEZSİZ FONK İSMİ ile çağlırılır
 
 addBtn.addEventListener('click', add);
 subtractBtn.addEventListener('click', subtract);
@@ -91,3 +109,9 @@ divideBtn.addEventListener('click', divide);
 // googlarken önce javascript yaz sonra birkaç keyword
 // birşey araştırırken mdn sitesini kullan
 // debugging özelliklerine baktık ve breakpoints ekledik.
+// conditionA AND conditionB OR conditionC
+// conditionA && conditionB || coditionC yani ya A-B şartı yada C şartı
+// çünkü & , || 'dan daha önceliklidir
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Operator_Precedence
+// konu ile ilgili yukarıdaki site ziyaret edilebilir.
+// NEGATIVE NUMBERS accepted as true !!!!!
