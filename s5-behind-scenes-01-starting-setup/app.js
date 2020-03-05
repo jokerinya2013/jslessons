@@ -26,4 +26,12 @@ greet();
 
 // varda object içinde tanımlanmış olmasına rağmen hobbiese ulaşırız. func içindeyse ulaşamayız
 // heap -->
-// stack -->
+// stack --> kısa süreli mesela bir func çağrıldığında devreye giriyor
+// ÇOK ÖNEMLİİİİ
+// PRIMITIVE = String, number, boolean, null, undefined, symbol (Normalde Stackte)
+// PRIMITIVE = yeniden atamada değeri değiştirmez. çünkü ilkinde değer atanır sadece
+// REFERENCE = Tüm Object ler (Heap de. pointer koyar) biri değişince diğeri de değişir
+// REFERENCE let hobbies = ['Sports']; let yetHobbies = [...hobbies]; şeklinde tanımlanırsa, ayrı bir tanımlama yapar
+// yani yukarıdaki gibi Reference type yapmaz
+// Bir fark daha
+// const person1 = {'enes'}; const person2 = {'enes'};  person1===person2 // output false
