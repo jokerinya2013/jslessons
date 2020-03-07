@@ -60,21 +60,22 @@ function calculateResult(calculationType) {
   writeToLog(calculationType, initialResult, enteredNumber, currentResult);
 }
 
-function add() {
-  calculateResult('ADD');
-}
+// bind() özelliği öğrenilince burası değiştirildi :)
+// function add() {
+//   calculateResult('ADD');
+// }
 
-function subtract() {
-  calculateResult('SUBTRACT');
-}
+// function subtract() {
+//   calculateResult('SUBTRACT');
+// }
 
-function multiply() {
-  calculateResult('MULTIPLY');
-}
+// function multiply() {
+//   calculateResult('MULTIPLY');
+// }
 
-function divide() {
-  calculateResult('DIVIDE');
-}
+// function divide() {
+//   calculateResult('DIVIDE');
+// }
 
 // currentResult = add(1, 2);
 // let calculationDescription = `(${defaultResult} + 10) * 3 / 2 - 1`;
@@ -83,10 +84,11 @@ function divide() {
 // bu şekilde yazamayız çünkü parantezli olduğu için ilk önce hesaplama yapar.
 // event listener o yüzden PARANTEZSİZ FONK İSMİ ile çağlırılır
 
-addBtn.addEventListener('click', add);
-subtractBtn.addEventListener('click', subtract);
-multiplyBtn.addEventListener('click', multiply);
-divideBtn.addEventListener('click', divide);
+// 6ncı bölümde bir değişiklik yapıldı
+addBtn.addEventListener('click', calculateResult.bind(this, 'ADD'));
+subtractBtn.addEventListener('click', calculateResult.bind(this, 'SUBTRACT'));
+multiplyBtn.addEventListener('click', calculateResult.bind(this, 'MULTIPLY'));
+divideBtn.addEventListener('click', calculateResult.bind(this, 'DIVIDE'));
 
 //
 // Notlar...

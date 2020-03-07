@@ -87,38 +87,61 @@ startGameBtn.addEventListener('click', () => {
 // bu 3 nokta diğerinden farklı bu parametreleri merge ederek array oluşturur
 // rest operator denir bu özelliğe
 
-const sumUp = (resultHandler, a, b, ...numbers) => {
+const combine = (resultHandler, operation, ...numbers) => {
   // a ve b yi ilk alır kalanı numbers olara array yapar
   const validateNumber = number => {
     return isNaN(number) ? 0 : number;
   };
   let sum = 0;
   for (const num of numbers) {
-    sum += validateNumber(num);
+    if (operation === 'ADD') {
+      sum += validateNumber(num);
+    } else {
+      sum -= validateNumber(num);
+    }
   }
   // return sum;
   resultHandler(sum);
   // kendi callback functionumuzu yaptık
 };
 
-const showResult = result => {
-  alert('Your result is ' + result);
+const showResult = (messageText, result) => {
+  alert(messageText + ' ' + result);
 };
-//  normalde function keyword ile tanımlamada rest operatörü ise 'arguments' olarak kullanılır
 
-const subtractUp = (resultHandler, ...numbers) => {
-  let sum = 0;
-  for (const num of numbers) {
-    //dont use diyor
-    sum -= num;
-  }
-  resultHandler(sum);
-};
+//  normalde function keyword ile tanımlamada rest operatörü 'arguments' olarak kullanılır
+// ama string olarak aldığı için uygun değil
+
+// const subtractUp = (resultHandler, ...numbers) => {
+//   let sum = 0;
+//   for (const num of numbers) {
+//     //dont use diyor
+//     sum -= num;
+//   }
+//   resultHandler(sum);
+// };
 // console.log(sumUp(1, 2, 3, 4, 'hgfghf', 5));
 // console.log(subtractUp(1, 2, 3, 4, 5));
 
-sumUp(showResult, 1, 2, 3, 4, 'hgfghf', 5);
-subtractUp(showResult, 1, 2, 3, 4, 5);
+combine(
+  showResult.bind(this, 'The result after adding all numbers is '),
+  'ADD',
+  1,
+  2,
+  3,
+  4,
+  'hgfghf',
+  5
+);
+combine(
+  showResult.bind(this, 'The result after subtracting all numbers is '),
+  'SUBTRACT',
+  1,
+  2,
+  3,
+  4,
+  5
+);
 //kendi callback functionumuzu yaptık
 //
 //
@@ -165,3 +188,7 @@ subtractUp(showResult, 1, 2, 3, 4, 5);
 
 // const deneme = all => console.log(all);
 // checkInput(deneme, 'lşkjşlkj', 'lşjkş', 0, 2);
+//
+// bir callback functionda değeri kullanmak için bind() kullanmak gerekiyor.
+// bind(this, ) en az iki argument alıyor. birincisi this diğerlerin istenilernler
+// kullanıldığı fonksiyondaki ilk parametreler olarak işlem görürler
