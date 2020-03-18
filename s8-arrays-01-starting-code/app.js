@@ -145,6 +145,52 @@ const sum = prices.reduce((prev, cur) => prev + cur, 0);
 
 console.log(sum);
 
+// split()
+const data = 'newyork;10.99;2000';
+
+const transformedData = data.split(';');
+transformedData[1] = +transformedData[1]; //number yaptı
+console.log(transformedData);
+
+// join()
+
+// const nameFragments = ['Max', 'Schwarz'];
+// const name = nameFragments.join(' ');
+// console.log(name);
+
+// spread opertör
+
+// const copiedNameFragments = [...nameFragments];
+// nameFragments.push('Mr');
+// console.log(nameFragments, copiedNameFragments);
+
+// console.log(Math.min(prices)); // NaN veriyor. arrayı böyle değerlendirmiyor
+// console.log(Math.min(...prices)); // 3.99, süper
+
+// const persons = [
+//   { name: 'Max', age: 30 },
+//   { name: 'Manuel', age: 31 }
+// ];
+
+// const copiedPersons = [...persons];
+// persons.push({ name: 'Anna', age: 29 });
+// persons[0].age = 31; //ama değişikliklerde oluyor
+// console.log(persons, copiedPersons); //yeni eklenmede copied de bir değişiklik olmuyor
+
+// // bunun olmasını istemiyorsan map() kullanabilirsin
+// const anotherCopiedPersons = persons.map(person => ({
+//   name: person.name,
+//   age: person.age
+// }));
+
+// array destruction yani parçalayıp ona göre kullanma
+const nameData = ['ibrahim', 'şakacı', 'Mr', 30];
+// const firstName = nameData[0];
+// const lastName = nameData[1];
+
+const [firstName, lastName, ...otherInformation] = nameData;
+console.log(firstName, lastName, otherInformation);
+
 // NOTLAR
 // arraylar zero baseddir yani 0 dan başlar
 // Array.from('Hi There!'); // array likedan array yapar ["H", "i", "!"]
@@ -196,3 +242,12 @@ console.log(sum);
 // başlangıçta önceki dğer = başlangıç değeri, anlık değer=orjArray[0] olarak kabul edilir
 //  yapılan işlem değerini bir sonraki iterationda öncekideğer yapacak.
 // reduce((prev, cur) => prev + cur, 0); kısa versiyonu can
+//
+// split('karakter') stringi böler, böldüğü elemanlardan bir array oluşturur.
+// split('karakter') karakter tanımlanmamışsa işlem yapmaz ('') olursa her karakteri ayrı yapar
+// join('karakter') array elemanlarını bir string yapar, aralarına karakteri yok. tanımlanmamışsa virgül koyar
+//
+// spread operation(...)
+// liste halini verir. const nameFragments = ['Max', 'Schwarz']; ---> ...nameFragments dersek 'Max', 'Schwarz' verir
+//  bunun bu şekilde kullanımı desteklenmemektedir
+// kopyalamaya yarar. const yeniListe = [...nameFragments] yaparsak o anki halini kopyalarız
