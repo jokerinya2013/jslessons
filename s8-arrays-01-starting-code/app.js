@@ -46,33 +46,79 @@
 // // hobbies.splice(0); //hepsini siler (2) 2 den sonrasını siler
 // console.log(hobbies);
 
-const testResults = [1, 5.3, 1.5, 10.99, -5, 10];
-const storedResults = testResults.concat([3.99, 2]);
+// const testResults = [1, 5.3, 1.5, 10.99, -5, 10];
+// const storedResults = testResults.concat([3.99, 2]);
 
-testResults.push(5.91);
+// testResults.push(5.91);
 
-console.log(storedResults, testResults);
-console.log(testResults.indexOf(1.5));
+// console.log(storedResults, testResults);
+// console.log(testResults.indexOf(1.5));
 
-console.log(testResults.includes(10.99)); //true
-console.log(testResults.indexOf(10.99) !== -1); //includes ile aynı işlemi yapar
+// console.log(testResults.includes(10.99)); //true
+// console.log(testResults.indexOf(10.99) !== -1); //includes ile aynı işlemi yapar
 
-const personData = [{ name: 'Max' }, { name: 'Manuel' }];
-console.log(personData.indexOf({ name: 'Manuel' })); //hata yani -1 verir
+// const personData = [{ name: 'Max' }, { name: 'Manuel' }];
+// console.log(personData.indexOf({ name: 'Manuel' })); //hata yani -1 verir
 
-const manuel = personData.find((person, idx, persons) => {
-  return person.name === 'Manuel';
+// const manuel = personData.find((person, idx, persons) => {
+//   return person.name === 'Manuel';
+// });
+
+// manuel.name = 'Anna';
+
+// console.log(manuel, personData);
+
+// const maxIndex = personData.findIndex((person, idx, persons) => {
+//   return person.name === 'Max';
+// });
+
+// console.log(maxIndex);
+
+// const prices = [10.99, 5.99, 3.99, 6.59];
+// const tax = 0.19;
+// const taxAdjustedPrices = [];
+
+// // for (const price of prices) {
+// //   taxAdjustedPrices.push(price *(1 + tax));
+// // }
+
+// prices.forEach((price, index, prices) => {
+//   //index e ulaşım sağlar
+//   const priceObj = { index: index, taxAdjPrice: price * (1 + tax) };
+//   taxAdjustedPrices.push(priceObj);
+// });
+
+// console.log(prices, taxAdjustedPrices);
+
+// map() kullanımı forEach ile farkı array tanımlanmasında, ayrıntı için açıklamalara bak
+const prices = [10.99, 5.99, 3.99, 6.59];
+const tax = 0.19;
+
+const taxAdjustedPrices = prices.map((price, index, prices) => {
+  const priceObj = { index: index, taxAdjPrice: price * (1 + tax) };
+  return priceObj;
 });
 
-manuel.name = 'Anna';
+console.log(prices, taxAdjustedPrices);
 
-console.log(manuel, personData);
+// sort()
 
-const maxIndex = personData.findIndex((person, idx, persons) => {
-  return person.name === 'Max';
-});
+// const sortedPrices = prices.sort((a, b) => {
+//   if (a > b) {
+//     return 1;
+//   } else if (a === b) {
+//     return 0;
+//   } else {
+//     return -1;
+//   }
+// });
+// sorted kısa
+const sortedPrices = prices.sort((a, b) => a - b);
+// reversed
+// console.log(sortedPrices.reverse());
+// const sortedPrices = prices.sort((a, b) => b - a);
 
-console.log(maxIndex);
+console.log(sortedPrices);
 
 // NOTLAR
 // arraylar zero baseddir yani 0 dan başlar
@@ -105,3 +151,12 @@ console.log(maxIndex);
 // findIndex(()=>{true}) ile aranan değer indexi return edildi
 //
 // includes=====is part of an index şeklindeki soruya cevap verir
+//
+// forEach() 3 argument alıyor INDEX'e ulaşmak istediğimizde pratiklik sağlıyor
+//
+// map() 3 argument alıyor forEach gibi, her elamanı işliyor ve return ediyor. kendisi topluca
+// yeni bir array oluşturuyor. const yeniArray = eskiArray.map((item)=>{ return işlemiş item });
+// her elemanı işleyin yeni arraye yerleştiriyor. forEach de de her elemanı işleyebiliriz ama öncesinde
+// yeniArrayı tanımlamak gerekiyor.map() ile tanımlamdan kullanabiliriz.
+// prices.sort((a, b) => a - b); --->> sort
+// prices.sort((a, b) => b - a); --->> reverse
