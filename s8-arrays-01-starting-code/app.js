@@ -29,18 +29,22 @@
 
 // console.log(personalData[1]);
 
-const hobbies = ['Sports', 'Cooking'];
-hobbies.push('Reading');
-hobbies.unshift('Coding');
-const poppedValue = hobbies.pop();
-hobbies.shift();
-console.log(hobbies);
-console.log(poppedValue);
+// const hobbies = ['Sports', 'Cooking'];
+// hobbies.push('Reading');
+// hobbies.unshift('Coding');
+// const poppedValue = hobbies.pop();
+// hobbies.shift();
+// console.log(hobbies);
+// console.log(poppedValue);
 
-hobbies[1] = 'Coding';
-hobbies[5] = 'İbrahim';
-console.log(hobbies);
-console.log(hobbies[3]);
+// hobbies[1] = 'Coding';
+// hobbies[5] = 'İbrahim';
+// console.log(hobbies);
+// console.log(hobbies[3]);
+
+// hobbies.splice(1, 0, 'Good Food', 'Leyla');
+// // hobbies.splice(0); //hepsini siler (2) 2 den sonrasını siler
+// console.log(hobbies);
 
 // NOTLAR
 // arraylar zero baseddir yani 0 dan başlar
@@ -54,3 +58,8 @@ console.log(hobbies[3]);
 // shift() baştan 1 kaldırır
 // shift sağa kaydırır, unshift sola kaydırır gibi düşülmüş isim o yüzden verilmiş
 // pop ve push daha hızlıymış
+// splice ile iki element arasına öge ekleyebiliriz, sadece array de çalışır, ARRAYLIKE da çalışmaz
+// silinmiş olan elamanı return eder
+// splice(silinecek el index, kaç eleman silinecek, 'İsteğe bağlı virgül ile ayrılmış insert stringler')
+// spliece(-2, 1) sondan ikinci elemanı siler
+// array[-2] !!! bu özellik normal  arraylerde çalışmaz
