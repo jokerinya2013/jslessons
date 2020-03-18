@@ -120,6 +120,31 @@ const sortedPrices = prices.sort((a, b) => a - b);
 
 console.log(sortedPrices);
 
+// filter
+// const filteredArray = prices.filter((price, idx, prices) => {
+//   return price > 6;
+// });
+// yukarıdakinin kısa hali
+const filteredArray = prices.filter(price => price > 6);
+console.log(filteredArray);
+
+// reduce
+// let sum = 0;
+// prices.forEach(price => (sum += price)); short version
+// prices.forEach(price => {
+//   sum += price;
+// });
+
+// console.log(sum);
+
+// const sum = prices.reduce((prevValue, curValue, curIndex, prices) => {
+//   return prevValue + curValue;
+// }, 0);
+
+const sum = prices.reduce((prev, cur) => prev + cur, 0);
+
+console.log(sum);
+
 // NOTLAR
 // arraylar zero baseddir yani 0 dan başlar
 // Array.from('Hi There!'); // array likedan array yapar ["H", "i", "!"]
@@ -160,3 +185,14 @@ console.log(sortedPrices);
 // yeniArrayı tanımlamak gerekiyor.map() ile tanımlamdan kullanabiliriz.
 // prices.sort((a, b) => a - b); --->> sort
 // prices.sort((a, b) => b - a); --->> reverse
+//
+// filter((eleman, index, orjinal array)=>{return true/false}) her elemana tek tek bakar.
+// true gelenler devam eder, false gelenler elenir
+// kısa halin kullanımı çok iyi, tek satırda işi bitiriyor
+// prices.filter(price => price > 6);
+//
+// reduce(öncekideğer, anlıkdeğer, o anki index, orj array) 4  argument alır
+// reduce((öncekideğer, anlıkdeğer, o anki index, orj array)=>{return yapılan işlem}, başlangıç değeri)
+// başlangıçta önceki dğer = başlangıç değeri, anlık değer=orjArray[0] olarak kabul edilir
+//  yapılan işlem değerini bir sonraki iterationda öncekideğer yapacak.
+// reduce((prev, cur) => prev + cur, 0); kısa versiyonu can
