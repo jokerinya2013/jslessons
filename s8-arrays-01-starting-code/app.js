@@ -47,11 +47,32 @@
 // console.log(hobbies);
 
 const testResults = [1, 5.3, 1.5, 10.99, -5, 10];
-const storedResults = testResults.slice();
+const storedResults = testResults.concat([3.99, 2]);
 
 testResults.push(5.91);
 
 console.log(storedResults, testResults);
+console.log(testResults.indexOf(1.5));
+
+console.log(testResults.includes(10.99)); //true
+console.log(testResults.indexOf(10.99) !== -1); //includes ile aynı işlemi yapar
+
+const personData = [{ name: 'Max' }, { name: 'Manuel' }];
+console.log(personData.indexOf({ name: 'Manuel' })); //hata yani -1 verir
+
+const manuel = personData.find((person, idx, persons) => {
+  return person.name === 'Manuel';
+});
+
+manuel.name = 'Anna';
+
+console.log(manuel, personData);
+
+const maxIndex = personData.findIndex((person, idx, persons) => {
+  return person.name === 'Max';
+});
+
+console.log(maxIndex);
 
 // NOTLAR
 // arraylar zero baseddir yani 0 dan başlar
@@ -73,3 +94,14 @@ console.log(storedResults, testResults);
 // slice(index, kaç tane istiyorsun) arrayı böler ve yeni array return eder.
 // orjinal array durur, array kopyalamak için de kullanılır
 // slice(-2, -1) şeklinde kullanılmalı, eksi değerleri seçerken
+// concat() pushdan farklı olarak array ekler ve yeni array oluşrurur
+//
+// reference type da çalışmaz
+// indexOf(value) ilk denk gelen indexi verir soldan başlar
+// lastIndexOf(value) sağdan başlar, ilk denk gelen indexi verir
+// yanlış bulursa -1 verir yanı 0dan küçük değer verir
+//
+// find(()=>{true}) find ile aranan değer return edildi
+// findIndex(()=>{true}) ile aranan değer indexi return edildi
+//
+// includes=====is part of an index şeklindeki soruya cevap verir
