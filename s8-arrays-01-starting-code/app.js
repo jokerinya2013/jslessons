@@ -46,6 +46,13 @@
 // // hobbies.splice(0); //hepsini siler (2) 2 den sonrasını siler
 // console.log(hobbies);
 
+const testResults = [1, 5.3, 1.5, 10.99, -5, 10];
+const storedResults = testResults.slice();
+
+testResults.push(5.91);
+
+console.log(storedResults, testResults);
+
 // NOTLAR
 // arraylar zero baseddir yani 0 dan başlar
 // Array.from('Hi There!'); // array likedan array yapar ["H", "i", "!"]
@@ -63,3 +70,6 @@
 // splice(silinecek el index, kaç eleman silinecek, 'İsteğe bağlı virgül ile ayrılmış insert stringler')
 // spliece(-2, 1) sondan ikinci elemanı siler
 // array[-2] !!! bu özellik normal  arraylerde çalışmaz
+// slice(index, kaç tane istiyorsun) arrayı böler ve yeni array return eder.
+// orjinal array durur, array kopyalamak için de kullanılır
+// slice(-2, -1) şeklinde kullanılmalı, eksi değerleri seçerken
