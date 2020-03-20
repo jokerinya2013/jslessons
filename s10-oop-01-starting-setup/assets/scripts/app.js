@@ -1,9 +1,4 @@
 class Product {
-  title = 'DEFAULT';
-  imageUrl;
-  description;
-  price;
-
   constructor(title, image, desc, price) {
     this.title = title;
     this.imageUrl = image;
@@ -11,50 +6,100 @@ class Product {
     this.price = price;
   }
 }
-console.log(new Product());
-const productList = {
-  products: [
+
+class ProductItem {
+  constructor(product) {
+    this.product = product;
+  }
+
+  addToCart() {
+    console.log('Adding product to cart...');
+    console.log(this.product);
+  }
+
+  render() {
+    const prodEl = document.createElement('li');
+    prodEl.className = 'product-item';
+    prodEl.innerHTML = `
+			<div>
+				<img src="${this.product.imageUrl}" alt=${this.product.title} />
+					<div class="product-item__content">
+						<h2>${this.product.title}</h2>
+						<h3>$${this.product.price}</h3>
+						<p>${this.product.description}</p>
+						<button>Add to Your Cart</button>
+				</div>
+			</div>
+      `;
+    const addCartButton = prodEl.querySelector('button');
+    addCartButton.addEventListener('click', this.addToCart.bind(this));
+    return prodEl;
+  }
+}
+
+class ProductList {
+  products = [
     new Product(
       'A Pillow',
       'https://cdn-linens.mncdn.com/Content/Images/Thumbs/0030775_boncuk-elyaf-yastik.jpeg',
-      19.99,
-      'A soft pillow!'
+      'A soft pillow!',
+      19.99
     ),
     new Product(
       'A Carpet',
       'https://www.halivitrini.com/bahariye-yolluk-hali-77x150-gallery-gp2792p-98741-42-B.jpg',
-      89.99,
-      'A carpet which you might like - or not.'
+      'A carpet which you might like - or not.',
+      89.99
     )
-  ],
+  ];
+
+  constructor() {}
+
   render() {
     const renderHook = document.getElementById('app');
     const prodList = document.createElement('ul');
     prodList.className = 'product-list';
 
     for (const prod of this.products) {
-      const prodEl = document.createElement('li');
-      prodEl.className = 'product-item';
-      prodEl.innerHTML = `
-			<div>
-				<img src="${prod.imageUrl}" alt=${prod.title} />
-					<div class="product-item__content">
-						<h2>${prod.title}</h2>
-						<h3>$${prod.price}</h3>
-						<p>${prod.description}</p>
-						<button>Add to Your Cart</button>
-				</div>
-			</div>
-			`;
-
+      const productItem = new ProductItem(prod);
+      const prodEl = productItem.render();
       prodList.append(prodEl);
     }
 
     renderHook.append(prodList);
   }
-};
+}
+
+const productList = new ProductList();
 
 productList.render();
+
 // NOTLAR
 // class keyword ile ve büyük harfle tanımlanır. "=" ile atama yapılır
 // içinde constroctor() keyword ile atama yapılır vue deki gibi
+// product arrayi için new Product(arguments) ile tanımlamayı yaptık bu sayede keyler tanımlanmış oldu ve
+// yanlış yazma olmaz.
+
+class Deneme {
+  adı; //burası olmak zorunda değil field deniyor bu bölgeye
+  soyadı;
+  constructor(isim, soyisim) {
+    this.adı = isim;
+    this.soyadı = soyisim;
+  }
+  deneme() {
+    console.log('denemen başarılı');
+  }
+}
+
+const isimler = {
+  kimlik: [new Deneme('ibrahim', 'şakacı'), new Deneme('afra', 'şakacı')],
+  yaz() {
+    console.log(this.kimlik[0].adı); //ibrahim
+    console.log(this.kimlik[1].adı); //afra
+  }
+};
+
+isimler.yaz();
+const yazma = new Deneme();
+yazma.deneme();
