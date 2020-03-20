@@ -22,10 +22,17 @@ const renderMovies = (filter = '') => {
   filteredMovies.forEach(movie => {
     //movie.info[extraName]; bu şekilde ulaşamazsın malesef bu dinamik keye
     const movieEl = document.createElement('li');
-    let text = movie.info.title + ' - ';
-    for (const key in movie.info) {
-      if (key !== 'title') {
-        text = text + `${key}: ${movie.info[key]} `; //dynamic için gerekli
+    const { info, ...otherProps } = movie; //movie.info demek bu aslında
+    console.log(otherProps); // kalan diğer propety leri buna ekler. bu örnek için movie.info var sadece
+    // const { title: movieTitle } = info; //info.title lı da tanımlayabiliriz. farklı isim vermek isterserk bu şekilde
+    let { getFormattedTitle } = movie;
+    getFormattedTitle = getFormattedTitle.bind(movie); //bu şekilde yaparak hatayı önledik
+    // let text = getFormattedTitle() + ' - '; // movie.getFormattedTitle() da aynı işlemi yapar aslında
+    let text = getFormattedTitle.apply(movie) + ' - '; // movie.getFormattedTitle() da aynı işlemi yapar aslında
+    for (const key in info) {
+      if (key !== 'title' && key !== '_title') {
+        //titleı yukarıda aldık çünkü burada texti belirtiyoruz.
+        text = text + `${key}: ${info[key]} `; //dynamic için for in gerekli
       }
     }
     movieEl.textContent = text;
@@ -39,7 +46,7 @@ const addMovieHandler = () => {
   const extraValue = document.getElementById('extra-value').value;
 
   if (
-    title.trim() === '' ||
+    //title check i buradan kaldırdık
     extraName.trim() === '' ||
     extraValue.trim() === ''
   ) {
@@ -47,15 +54,35 @@ const addMovieHandler = () => {
   }
 
   const newMovie = {
-    info: { title, [extraName]: extraValue },
-    id: Math.random().toString()
+    // info: { title, [extraName]: extraValue }, // title: title , key: value
+    info: {
+      set title(val) {
+        if (val.trim() === '') {
+          this._title = 'DEFAULT';
+          return;
+        }
+        this._title = val;
+      },
+      get title() {
+        return this._title;
+      },
+      [extraName]: extraValue
+    },
+    id: Math.random().toString(),
+    getFormattedTitle() {
+      console.log(this); //bu obj e bağlı
+      return this.info.title.toUpperCase();
+    }
   };
 
+  newMovie.info.title = title; //yukarıda tanımlanmış olan title ı buraya atadık burada set yaptık
+  console.log(newMovie.info.title); // burada get yapmış olduk aslında
   movies.push(newMovie);
   renderMovies();
 };
 
 const searchMovieHandler = () => {
+  console.log(this);
   const searchInput = document.getElementById('filter-title').value;
   renderMovies(searchInput);
 };
@@ -76,3 +103,48 @@ searchMovieBtn.addEventListener('click', searchMovieHandler);
 //  arrayde ->> bunu engellemek için map kullanırız
 // objectde ->> const yeni = {...eski, adı: 'ibo', liste: [...yeni.eskiLise]}; bu şekilde önce eskiyi alır sonra üzerine kendi
 // bilgilerimizi yazabiliriz yada const yeni = Object.assign({}, eski); yapabiliriz. (Browser support tam olmayabilir)
+//
+// object destruction da const { keyname } = objname şeklinde kullanıyoruz. array de her isim gelebiliyordu fakat obj
+// için ancak key gelebilir. örn : const { info } = movie; //  burada movie.info nun yerine info kullanabiliriz artık
+// eğer info da bir obj ise onu da parçalayabiliriz, ve buna yeni isim vermek istersek -const { key: yeniİsim } = obj; -
+//
+// this. keyword
+// functionName.call( , , ,) çeşitli arguments alır, functionName.apply(obj, [agruments]) array olarak alır
+//apply ve call başka bir obj de tanımlanmış func ı kullanmaya yarar
+// arrow func this i window a bağlar
+//
+// AŞAĞIDAKİ ÖRNEK SEBEBİYLE ARROW FUNC KULLANILMASI GEREKEN YERLER VAR...
+// const person = {
+//   adı: 'ibrahim',
+//   soyadı: 'şakacı',
+//   hobiler: ['Spor', 'Bilgisayar'],
+//   yaş() {
+//     this.hobiler.forEach(h => {
+//       console.log(h + ' ' + this.adı);
+//     });
+//   }
+// }; //spor ibrahim bilgisayar ibrahim verir
+
+// const person2 = {
+//   adı: 'ibrahim',
+//   soyadı: 'şakacı',
+//   hobiler: ['Spor', 'Bilgisayar'],
+//   yaş() {
+//     this.hobiler.forEach(function(h) {
+//       console.log(h + ' ' + this.adı);
+//     });
+//   }
+// }; //spor undefined bilgisayar undefined verir
+
+// yukarıdaki örnek için tanımlanmış bir funtionu başka yerde kullanabilmek için şunu yapabiliriz
+// person.yaş.apply(person2); -----> //spor ibrahim bilgisayar ibrahim verir
+// person.yaş.call(person2); da aynı sonucu verir
+//
+
+// set ve get methodları kullandı
+// girilen bir değerin validation ı yapmak için kullanılabilir. paraztez olmadan ulaşım sağlar
+// property üretir. set(param){} param almak zorundadır
+// deneme = param; şeklinde çağrılır ((( deneme(param) gibi değil yani func farklı olarak)))
+// yukarıda bir mantık koymaya çalıştı, sen kendin başka bir mantık kurabilirsin bununla ilgili
+// deneme = param; set() yapar..
+// deneme; get yapar
