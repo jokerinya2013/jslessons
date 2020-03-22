@@ -7,7 +7,33 @@ class Product {
   }
 }
 
-class ShoppingCart {
+class ElementAttribute {
+  constructor(attrName, attrValue) {
+    this.name = attrName;
+    this.value = attrValue;
+  }
+}
+
+class Component {
+  constructor(renderHookId) {
+    this.hookId = renderHookId;
+  }
+  createRootElement(tag, cssClasses, attributes) {
+    const rootElement = document.createElement(tag);
+    if (cssClasses) {
+      rootElement.className = cssClasses;
+    }
+    if (attributes && attributes.length > 0) {
+      for (const attr of attributes) {
+        rootElement.setAttribute(attr.name, attr.value); // key value şeklinde değer yapar elementAttributes den gelecek buraya
+      }
+    }
+    document.getElementById(this.hookId).append(rootElement);
+    return rootElement; // neden döndük bunu?
+  }
+}
+
+class ShoppingCart extends Component {
   items = [];
 
   set cartItems(value) {
@@ -25,6 +51,10 @@ class ShoppingCart {
     return sum;
   }
 
+  constructor(renderHookId) {
+    super(renderHookId);
+  }
+
   addProduct(product) {
     const updatedItems = [...this.items];
     updatedItems.push(product);
@@ -32,14 +62,14 @@ class ShoppingCart {
   }
 
   render() {
-    const cartEl = document.createElement('section');
+    const cartEl = this.createRootElement('section', 'cart');
+    // const cartEl = document.createElement('section'); //yukarı tek yerde topladık artık
     cartEl.innerHTML = `
       <h2>Total: \$${0} </h2>
       <button>Order Now!</button>
     `;
-    cartEl.className = 'cart';
+    // cartEl.className = 'cart'; //bunuda yukarıda topladık
     this.totalOutput = cartEl.querySelector('h2');
-    return cartEl;
   }
 }
 
@@ -107,12 +137,11 @@ class Shop {
   render() {
     const renderHook = document.getElementById('app');
 
-    this.cart = new ShoppingCart();
-    const cartEl = this.cart.render();
+    this.cart = new ShoppingCart('app');
+    this.cart.render();
     const productList = new ProductList();
     const prodListEl = productList.render();
 
-    renderHook.append(cartEl);
     renderHook.append(prodListEl);
   }
 }
@@ -139,6 +168,7 @@ App.init();
 // yanlış yazma olmaz.
 // yukarı shopping cart a get set koyduk. get return eder bir değeri
 // set(val) val ı almak zorundadır.
+// setAttribute("class", "yeni-class") ----> html içinde class="yeni-class" yazar bunun gibi bir kullanımı var
 
 // class Deneme {
 //   adı; //burası olmak zorunda değil field deniyor bu bölgeye
