@@ -12,7 +12,7 @@ class ShoppingCart {
 
   addProduct(product) {
     this.items.push(product);
-    this.totalOutput = `<h2>Total: \$${1} </h2>`;
+    this.totalOutput.innerHTML = `<h2>Total: \$${1} </h2>`;
   }
 
   render() {
@@ -33,8 +33,7 @@ class ProductItem {
   }
 
   addToCart() {
-    console.log('Adding product to cart...');
-    console.log(this.product);
+    App.addProductToCart(this.product);
   }
 
   render() {
@@ -92,8 +91,8 @@ class Shop {
   render() {
     const renderHook = document.getElementById('app');
 
-    const cart = new ShoppingCart();
-    const cartEl = cart.render();
+    this.cart = new ShoppingCart();
+    const cartEl = this.cart.render();
     const productList = new ProductList();
     const prodListEl = productList.render();
 
@@ -102,8 +101,20 @@ class Shop {
   }
 }
 
-const shop = new Shop();
-shop.render();
+class App {
+  static cart;
+
+  static init() {
+    const shop = new Shop();
+    shop.render();
+    this.cart = shop.cart;
+  }
+  static addProductToCart(product) {
+    this.cart.addProduct(product);
+  }
+}
+
+App.init();
 
 // NOTLAR
 // class keyword ile ve büyük harfle tanımlanır. "=" ile atama yapılır
@@ -111,27 +122,27 @@ shop.render();
 // product arrayi için new Product(arguments) ile tanımlamayı yaptık bu sayede keyler tanımlanmış oldu ve
 // yanlış yazma olmaz.
 
-class Deneme {
-  adı; //burası olmak zorunda değil field deniyor bu bölgeye
-  soyadı;
-  constructor(isim, soyisim) {
-    this.adı = isim;
-    this.soyadı = soyisim;
-  }
-  deneme() {
-    console.log('denemen başarılı');
-  }
-}
+// class Deneme {
+//   adı; //burası olmak zorunda değil field deniyor bu bölgeye
+//   soyadı;
+//   constructor(isim, soyisim) {
+//     this.adı = isim;
+//     this.soyadı = soyisim;
+//   }
+//   deneme() {
+//     console.log('denemen başarılı');
+//   }
+// }
 
-const isimler = {
-  kimlik: [new Deneme('ibrahim', 'şakacı'), new Deneme('afra', 'şakacı')],
-  yaz() {
-    console.log(this.kimlik[0].adı); //ibrahim
-    console.log(this.kimlik[1].adı); //afra
-  }
-};
+// const isimler = {
+//   kimlik: [new Deneme('ibrahim', 'şakacı'), new Deneme('afra', 'şakacı')],
+//   yaz() {
+//     console.log(this.kimlik[0].adı); //ibrahim
+//     console.log(this.kimlik[1].adı); //afra
+//   }
+// };
 
-isimler.yaz();
-// const yazma = new Deneme();
-// yazma.deneme();
-new Deneme().deneme();
+// isimler.yaz();
+// // const yazma = new Deneme();
+// // yazma.deneme();
+// new Deneme().deneme();
