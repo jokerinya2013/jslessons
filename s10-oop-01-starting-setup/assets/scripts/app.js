@@ -118,7 +118,7 @@ class ProductItem extends Component {
 }
 
 class ProductList extends Component {
-  #products = [];
+  #products = []; // buna dışarıdan erişilemez ama browser desteği kötü
 
   constructor(renderHookId) {
     super(renderHookId, false);
