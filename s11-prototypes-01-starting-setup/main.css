@@ -33,7 +33,6 @@ body {
 .chip_info p {
   font-size: 0.8rem;
   margin: 0;
-  font-weight: 200;
 }
 .chip .chip_img-container {
   border-radius: 50%;
@@ -45,6 +44,45 @@ body {
   top: 10%;
 }
 .img-box {
+  background: url('https://img.topresimler.com/tr/aslanlar/aslanlar_002.jpg')
+    center/cover no-repeat;
+  height: 100%;
+}
+
+/* flex ile */
+
+.chip-two {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 10px;
+  max-width: 17rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  display: flex;
+  float: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chip-two_info {
+  text-align: center;
+}
+
+.chip-two_info h4 {
+  margin: 0 0 10px 0;
+}
+
+.chip-two_info p {
+  font-size: 0.8rem;
+  margin: 0;
+}
+.chip-two_img-container {
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+  overflow: hidden;
+}
+
+.two-img-box {
   background: url('https://img.topresimler.com/tr/aslanlar/aslanlar_002.jpg')
     center/cover no-repeat;
   height: 100%;
