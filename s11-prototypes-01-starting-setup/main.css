@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.chip {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  width: 17rem;
+  min-height: 6rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  display: inline-block;
+  position: relative;
+}
+
+.chip .chip_info {
+  font-family: inherit;
+  width: 60%;
+  display: inline-block;
+  text-align: center;
+  margin-top: 2.5%;
+}
+
+.chip_info h4 {
+  margin: 0 0 10px 0;
+}
+
+.chip_info p {
+  font-size: 0.8rem;
+  margin: 0;
+  font-weight: 200;
+}
+.chip .chip_img-container {
+  border-radius: 50%;
+  width: 5rem;
+  height: 5rem;
+  overflow: hidden;
+  position: absolute;
+  right: 2.5%;
+  top: 10%;
+}
+.img-box {
+  background: url('https://img.topresimler.com/tr/aslanlar/aslanlar_002.jpg')
+    center/cover no-repeat;
+  height: 100%;
+}
