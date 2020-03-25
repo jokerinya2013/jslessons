@@ -54,6 +54,11 @@ section ul {
   overflow: scroll;
 }
 
+section ul::-webkit-scrollbar {
+  display: none;
+  /* kenar hattı sildik */
+}
+
 section > h2 {
   color: white;
   margin: 0;
