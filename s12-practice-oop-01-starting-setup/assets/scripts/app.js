@@ -51,8 +51,9 @@ class Tooltip extends Component {
   create() {
     const tooltipElement = document.createElement('div');
     tooltipElement.className = 'card';
-    this.element = tooltipElement; // yukarıda silebilmek için burada buna atadı
+    tooltipElement.textContent = 'DUMMY!';
     tooltipElement.addEventListener('click', this.closeTooltip);
+    this.element = tooltipElement; // yukarıda silebilmek için burada buna atadı
   }
 }
 
@@ -70,6 +71,8 @@ class ProjectItem {
     if (this.hasActiveToolTip) {
       return;
     }
+    const projectElement = document.getElementById(this.id);
+    console.log(projectElement.dataset);
     const tooltip = new Tooltip(() => {
       this.hasActiveToolTip = false;
     });
@@ -80,7 +83,7 @@ class ProjectItem {
   connectMoreInfoButton() {
     const projectItemElement = document.getElementById(this.id);
     let moreInfoBtn = projectItemElement.querySelector('button:first-of-type');
-    moreInfoBtn.addEventListener('click', this.showMoreInfoHandler);
+    moreInfoBtn.addEventListener('click', this.showMoreInfoHandler.bind(this));
   }
 
   connectSwitchButton(type) {
