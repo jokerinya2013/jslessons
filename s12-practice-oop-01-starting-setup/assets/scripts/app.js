@@ -37,9 +37,10 @@ class Component {
 }
 
 class Tooltip extends Component {
-  constructor(closeNotifierFunction) {
+  constructor(closeNotifierFunction, text) {
     super();
     this.closeNotifier = closeNotifierFunction;
+    this.text = text;
     this.create();
   }
 
@@ -51,7 +52,7 @@ class Tooltip extends Component {
   create() {
     const tooltipElement = document.createElement('div');
     tooltipElement.className = 'card';
-    tooltipElement.textContent = 'DUMMY!';
+    tooltipElement.textContent = this.text;
     tooltipElement.addEventListener('click', this.closeTooltip);
     this.element = tooltipElement; // yukarıda silebilmek için burada buna atadı
   }
@@ -72,10 +73,10 @@ class ProjectItem {
       return;
     }
     const projectElement = document.getElementById(this.id);
-    console.log(projectElement.dataset);
+    const tooltipText = projectElement.dataset.extraInfo;
     const tooltip = new Tooltip(() => {
       this.hasActiveToolTip = false;
-    });
+    }, tooltipText);
     tooltip.attach();
     this.hasActiveToolTip = true;
   }
@@ -159,3 +160,8 @@ App.init(); //static olduğu için bu şekilde çalıştırabildik
 // setter fonksiyonlar ise özelliğin değeri değiştirilmek istendiğinde çalıştırılır.
 // new ile çağrıldığında constructor() func çalıştırıyor. bundan yararlanabilirsin.
 //  iç içe class kullanımına çalışmalısın
+//
+// notlar for section-13
+// html içinde data-herhangi-bir-şey diye attributes tanımlarız
+// domelement.dataset.herhangiBirŞey şeklinde js içinde bu tanımlamaya ulaşırız
+// önemli yazı camelCase e dönüştürülür otomatik olarak
