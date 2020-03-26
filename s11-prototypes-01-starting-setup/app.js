@@ -63,7 +63,8 @@ class Person {
 // console.log(p.__proto__ === p2.__proto__); //true çünkü aynı memory parçacığını kullanıyorlar
 
 // const btn = document.getElementById('btn');
-// btn.addEventListener('click', p.greet); // with,  greet = () => {} şeklinde çalışır
+// btn.addEventListener('click', p.greet); // with,  greet = () => {} şeklinde çalışır this içinde bulunduğu obj gösterir her zaman
+//  ama memory olarak iyi değildir. tabi kod çok değilse problem değil
 // btn.addEventListener('click', p.greet.bind(p)); // with greet(){} şeklinde çalışır bu daha efektif ama binlerce clasın varsa
 
 const course = {
