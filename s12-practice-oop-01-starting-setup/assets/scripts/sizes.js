@@ -60,3 +60,19 @@ afracık.yapıştır();
 ibrahimcik.degisim(afracık.yazdır.bind(afracık)); // afra
 
 // diğer instanceı fonksiyonel olarak bağladım
+
+const error = true;
+const throwDeneneme = () => {
+  if (error) {
+    const benimHata = new Error('SErverdan bilgi hatalı geldi');
+    benimHata.code = 404; // bunu koymayadabilirsin
+    // throw benimHata diyebilirsin direk
+    if (benimHata.code === 404) {
+      throw benimHata; // 67 nolu satırdakini iletir
+    }
+  }
+  console.log('throw yaptığı için kod akışını tamamen durdurur');
+};
+throwDeneneme();
+
+console.log('Burayı da yazmaz');

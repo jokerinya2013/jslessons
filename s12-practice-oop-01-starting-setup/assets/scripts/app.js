@@ -168,6 +168,22 @@ class App {
     finishedProjectsList.setSwitchHandlerFunction(
       activeProjectsList.addProject.bind(activeProjectsList) //p.func.bind(p) şeklinde yapmak zorundasın
     );
+    // document
+    //   .getElementById('start-analytics-btn')
+    //   .addEventListener('click', this.startAnalytics); burası button a bağlı tag ekleme yapıyordu değiştirdik
+    const timerId = setTimeout(this.startAnalytics, 3000); // 3sn sonra başlıyor, id döner
+    document
+      .getElementById('stop-analytics-btn')
+      .addEventListener('click', () => {
+        clearTimeout(timerId);
+      });
+  }
+  // scipt tag yapabiliriz
+  static startAnalytics() {
+    const analyticsScript = document.createElement('script');
+    analyticsScript.src = 'assets/scripts/analytics.js';
+    analyticsScript.defer = true;
+    document.head.append(analyticsScript);
   }
 }
 
@@ -187,3 +203,22 @@ App.init(); //static olduğu için bu şekilde çalıştırabildik
 // html içinde data-herhangi-bir-şey diye attributes tanımlarız
 // domelement.dataset.herhangiBirŞey şeklinde js içinde bu tanımlamaya ulaşırız
 // önemli yazı camelCase e dönüştürülür otomatik olarak
+//
+// script tag ile script atamak pek güvenli olmayabilir diyor o yüzden dikkatli olmak gerekiyor diyor
+// setTimeout(fonksiyon, zaman, [arguments]) --> bu arguments fonksiyon geçmek istediğimiz arugmentler oluyor
+// ÇOK ÖNEMLİ setTimeout bir id döner bu yüzden onu bir const a atayabiliriz
+//
+// location (.href, .host) vs bir sürü özellik var
+// history (.back(), .forward(), go(kaçbasamak)) routerın atası
+// navigator.geolocation.getCurrentPosition(data => {console.log(data)}) ile location bilgisi alırsın
+//
+// const date = new Date(); atanıp birçok özellik kullanılabilir. new Date() ms olarak verir
+// date.getTime() ms cinsinden number olarak verir since jan 1st 1970 den bu yana
+// date.getDay() getHours() getFullYear()
+// new Date('12/25/2019 23:30:00'); Bu şekilde içine tanımlama yapabilirsin
+// Wed Dec 25 2019 23:30:00 GMT+0300 (GMT+03:00) böyle bir dönüş verir
+//
+// new Error('Something went wrong'); şeklinde error mesaji yayınlayabiliriz.
+// throw 'An error!' benzeri bir durumdur. throw da kodun uygulamasını tamamen durdurur
+// throw new Error('mesaj'); şeklinde kullanım hatanın nerede olduğunu verdiği içinde candır
+// consta atayıp içine code koyabilirsin.size js e bak
