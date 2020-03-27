@@ -14,3 +14,49 @@
 // eleman.scrollIntoView(); bunda direk bu elemana zıplar, behavior : 'auto'  olduğu için hızlı gider
 // eleman.scrollIntoView({ behavior: 'smooth' })
 // <template></template> normalde render edilmez başlangıçta
+
+class Component {
+  infoArray = [];
+  constructor(...infos) {
+    for (const info of infos) {
+      this.infoArray.push(info);
+    }
+  }
+  listItems() {
+    const newly = this.infoArray.map(el => {
+      const li = document.createElement('li');
+      li.textContent = el;
+      return li;
+    });
+    return newly;
+  }
+}
+
+class İsimYaz extends Component {
+  constructor(ad, yaş, durum, hookId) {
+    super(ad, yaş, durum);
+    this.hookId = hookId;
+  }
+  yapıştır() {
+    const hookEl = document.getElementById(`${this.hookId}`);
+    for (const li of this.listItems()) {
+      hookEl.append(li);
+    }
+  }
+  degisim(ad) {
+    // ad(); aşağısı ile aynı bu da afra çıktısı verir. diğer instance ın fonksiyonun bu şekilde kullanabiliriz
+    this.yazdır = ad;
+    this.yazdır();
+  }
+  yazdır() {
+    console.log(this.hookId);
+  }
+}
+
+const ibrahimcik = new İsimYaz('ibrahim', 30, 'Mutlu', 'ibo');
+ibrahimcik.yapıştır();
+const afracık = new İsimYaz('Afra', 29, 'Fena Değil', 'afra');
+afracık.yapıştır();
+ibrahimcik.degisim(afracık.yazdır.bind(afracık)); // afra
+
+// diğer instanceı fonksiyonel olarak bağladım
