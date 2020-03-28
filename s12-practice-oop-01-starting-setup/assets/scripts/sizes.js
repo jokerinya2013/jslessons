@@ -1,10 +1,14 @@
-//
+// Bu dersin ekinde çok güzel bir pdf var udemy den ona bakabilirsin
 //
 // Notlar
 // getBoundingClientRect(); konumların yer aldığı obj verir. devtoolstan bakabilirsin
+// top ve left solüst köşeden olan mesafeyi, bottom to right sağ alt köşeden olan mesafeyi verir burada
+// .offsetTop document flow a göre üste olan uzunluğu verir. scroll ile değişmez (DOMRect deki x ve y gibi)
 // .clientHeight; inner elemanın boyutlarını verir
 // .offsetHeight border dahil uzunluğu verir(width de aynı)
-// .scrollTop; o anlık scroll değerini verir
+// sayfa genişliğini scroll bar olmadan vermesi için "window.innerWidth" kullanmak uygun değil
+// bunun yerine "document.documentElement.clientWidth" kullanmamız gerekir
+// .parentElement.scrollTop; o anlık scroll değerini verir DİKKAT parent elemana çıkarak bulmak gerekir
 // birşey.offsetLeft; ile birşey.offsetTop; o elemanını top-left corner ını verir
 // scrollTo(0, 50); x ve y olarak scroll yaparız specific bir noktaya
 // scrollBy(0, 50); bulunduğu notkadan scroll yapar specifik bir noktaya değilde

@@ -13,12 +13,83 @@ class DOMHelper {
     const element = document.getElementById(elementId);
     const destination = document.querySelector(newDestinationSelector);
     destination.append(element);
+    element.scrollIntoView({ behavior: 'smooth' }); // ready to use function. brings element into the viewport
   }
 }
 
-class Tooltip {}
+class Component {
+  // eğer hostElementId gelirse ona gelmezse body e ekle
+  // ikici params gelmezse false kabul et demek.
+  constructor(hostElementId, insertBefore = false) {
+    if (hostElementId) {
+      this.hostElement = document.getElementById(hostElementId);
+    } else {
+      this.hostElement = document.body;
+    }
+    this.insertBefore = insertBefore; //öne mi ekleyim sona mı?
+  }
+
+  detach() {
+    this.element.remove();
+    // this.element.parentElement.removeChild(this.element);  ----> bu eski browserlar için
+  }
+  attach() {
+    this.hostElement.insertAdjacentElement(
+      this.insertBefore ? 'afterbegin' : 'beforeend',
+      this.element
+    );
+  }
+}
+
+class Tooltip extends Component {
+  constructor(closeNotifierFunc, tooltipText, hostElementId) {
+    super(hostElementId); //eklenecek olan idyi gönderiyoruz
+    // closeNotifierFunc itemdan geliyor. hasActiveTooltip i false yapan func
+    this.closeNotifier = closeNotifierFunc; //gelen func kendi instance ımıza ekledik.
+    this.text = tooltipText;
+    this.create();
+  }
+  closeTooltip() {
+    // hem detach ı hem notifier ı çalıştırdım
+    this.detach();
+    this.closeNotifier();
+  }
+
+  create() {
+    const tooltipElement = document.createElement('div');
+    tooltipElement.className = 'card';
+    // içeriğini textContent değilde başka türü koyacağız //text aşağıdan itemdan dataset olarak geldi.
+    const tooltipTemplate = document.getElementById('tooltip'); //template tagli yeri seçtik
+    const tooltipBody = document.importNode(tooltipTemplate.content, true); // içeriği kopyaladık
+    tooltipBody.querySelector('p').textContent = this.text; // bu içerikten p'yi seçiyoruz
+    tooltipElement.append(tooltipBody); // tooltip div olarak seçmiştik. içeriği içine koyuyoruz
+
+    // console.log(this.hostElement.getBoundingClientRect()); //this.hostElement aslında "component"ta
+    const hostElementLeft = this.hostElement.offsetLeft; // ana elemanın soldan mesafesi (p1, p2)
+    const hostElementTop = this.hostElement.offsetTop; // yukarıdan mesafesi
+    const hostElementHeight = this.hostElement.clientHeight; // kendi uzunluğu (çünkü tabana koymak istiyoruz)
+    const parentElementScrolling = this.hostElement.parentElement.scrollTop; // scroll yapılmışsa onu bulduk
+
+    const x = hostElementLeft + 20;
+    const y = hostElementTop + hostElementHeight - parentElementScrolling - 10;
+
+    tooltipElement.style.position = 'absolute';
+    tooltipElement.style.left = x + 'px';
+    tooltipElement.style.top = y + 'px';
+
+    // tooltipElement.addEventListener('click', () => {
+    //   tooltipElement.remove();
+    // });
+    // yukardıdaki de çalışıyor. ama max bu şekilde yaptı..
+    tooltipElement.addEventListener('click', this.closeTooltip.bind(this));
+    this.element = tooltipElement; // hem tooltip hem component class ında kullanabilmek için buraya atadık
+  }
+
+  // tooltip i eklerken önceden açık mı diye kontrol etmek için aşağıları yazdıktan sonra hasActiveTooltip diye prop belirledik
+}
 
 class ProjectItem {
+  hasActiveTooltip = false; // her item için başlangıçta false tabiki
   constructor(id, updateProjectListFunction, type) {
     this.id = id;
     this.updateProjectListHandler = updateProjectListFunction; // bu aşağıdan gelen switchProject func ı aslında.
@@ -27,7 +98,32 @@ class ProjectItem {
     this.connectSwithButton(type);
   }
 
-  connectMoreInfoButton() {}
+  showMoreInfoHandler() {
+    if (!this.hasActiveTooltip) {
+      const projectElement = document.getElementById(this.id); //p1, p2 seçiyoruz
+      const tooltipText = projectElement.dataset.extraInfo; // dataset te yer alan bilgiyi seçiyoruz
+      // şimdi asıl ince kısım burada. ProjectItem ın bir ögesini tooltip ile değiştirebilmek için
+      // bu işlemi yapan fonksiyonu her tooltip e atıyoruz
+      const tooltip = new Tooltip(
+        () => {
+          this.hasActiveTooltip = false;
+        },
+        tooltipText,
+        this.id
+      ); //yeni bir tooltip oluştur dedik. ananomous func, text ve id ekledik
+      tooltip.attach(); // oluşturulan tooltipdeki attach methodunu çalıştırdık.
+      this.hasActiveTooltip = true;
+    }
+  }
+
+  connectMoreInfoButton() {
+    const projectItemElement = document.getElementById(this.id); // p1-p2 ile "li" çağıdım.
+    const moreInfoBtn = projectItemElement.querySelector(
+      'button:first-of-type'
+    ); //ilk buttonu çağırdım.
+    moreInfoBtn.addEventListener('click', this.showMoreInfoHandler.bind(this));
+  }
+
   connectSwithButton(type) {
     const projectItemElement = document.getElementById(this.id); // p1-p2 ile li çağıdım.
     let switchBtn = projectItemElement.querySelector('button:last-of-type'); //son buttonu çağırdım.
