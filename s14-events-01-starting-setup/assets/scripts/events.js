@@ -1,4 +1,4 @@
-const btns = document.querySelectorAll('button');
+const btn = document.querySelector('button'); //ilk button
 
 const clickBtn = event => {
   // event.target.disabled = true; // tıkladığımızı  disabled yap.
@@ -19,11 +19,31 @@ const clickBtn2 = () => {
 //   btn.removeEventListener('click', clickBtn);
 // }, 2000);
 
-btns.forEach(btn => {
-  btn.addEventListener('mouseenter', clickBtn);
+// btns.forEach(btn => {
+//   btn.addEventListener('mouseenter', clickBtn);
+// });
+
+// window.addEventListener('scroll', event => {
+//   console.log(event);
+// });
+
+const form = document.querySelector('form');
+
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  console.log(event);
 });
 
-window.addEventListener('scroll', event => {
+const div = document.querySelector('div');
+
+div.addEventListener('click', event => {
+  console.log('Dıv');
+  console.log(event);
+}); // true olursa bunu çalıştırır
+
+btn.addEventListener('click', event => {
+  event.stopPropagation(); // div yazmaz, divin başka yerlerine basınca yazmaya devam eder
+  console.log('btn');
   console.log(event);
 });
 
@@ -43,3 +63,14 @@ window.addEventListener('scroll', event => {
 // peki ya atanmış func anonomous func ise??? ---> bu durumda bir çözüm yok. func tanımlayıp ismiyle kullancaksın
 // funcName.bind(this) --> burada da remove even listener yaparken bindli ifadeyi const ile tanımlayıp öyle
 // kullanmak gerekiyor
+//
+// form içindeki button da bilgileri server a göndermeye çalışıyor, yeniden yüklüyor,
+// bu yüzden event listeneri form a atayabiliriz.
+// tüm elemanlarda isim.preventDefault() kullanabiliriz
+//
+// capturing event listenerin dıştan içe gelmesi, bubbling içten dışa gitmesi.
+// yani button/div/section a event lis eklendiyse default olarak bu önce button dakini çalıştırır.
+// ama bu değiştirilebilir. addEventListener(trigger, func, Boolean) --> Boolean default olarak false
+// eğer true alırsa Capturing e döner ve dıştan içe uygular.
+// tüm bu olaylara PROPAGATION denir. event.stopPropagation() ile bu zincirleme event dışındakiler engellenir
+// mouseenter, drag bubling yapmaz o yüzden stopPropagation yapmaya gerek yoktur.

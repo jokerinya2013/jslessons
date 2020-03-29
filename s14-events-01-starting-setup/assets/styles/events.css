@@ -40,3 +40,12 @@ button:active {
   height: 3000px;
   border: 1px solid #ccc;
 }
+
+li {
+  padding: 1rem;
+  border: 1px solid #ccc;
+}
+
+ul {
+  list-style: none;
+}
