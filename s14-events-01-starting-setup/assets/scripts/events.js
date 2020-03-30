@@ -47,6 +47,42 @@ btn.addEventListener('click', event => {
   console.log(event);
 });
 
+const listItems = document.querySelectorAll('li');
+const list = document.querySelector('ul');
+// burası max in çözümü. benden yarı yarıya daha az kod kullanmış
+// listItems.forEach(listItem => {
+//   listItem.addEventListener('click', event => {
+//     event.target.classList.toggle('highlight');
+//   });
+// });
+
+// burasını ben yaptım çok şükür. burada tek tek tüm elemanlara event lis eklendi
+// const liItems = document.querySelectorAll('li');
+// const addColor = event => {
+//   let bgColor = event.target.style.backgroundColor;
+//   if (bgColor === 'red') {
+//     event.target.style.backgroundColor = 'white';
+//   } else {
+//     event.target.style.backgroundColor = 'red';
+//   }
+// };
+// for (const li of liItems) {
+//   li.addEventListener('click', addColor.bind(li));
+// }
+
+list.addEventListener('click', event => {
+  // console.log(event.currentTarget); // bu ul yi seçiyor
+  // event.target.classList.toggle('highlight'); // tıklanılan en küçük elemanı seçer
+  event.target.closest('li').classList.toggle('highlight'); // ul içinde hangi elemana tıklanırsa en yakın li seçer
+  // hatta li tıklansa da kendisini seçer
+  benimBtn.click(); // btn ye uygulanmış olan event lis ı çalıştırabiliriz
+}); //ul e uygulanmış olmasına rağmen, bubbling den dolayı event target olarak li ı alır
+
+// bunu event e bakmak için ben koydum
+const benimBtn = document.getElementById('benim');
+benimBtn.addEventListener('click', event => {
+  console.log('benim buton', event);
+});
 //
 // Notlar
 // section-14 Events
@@ -74,3 +110,15 @@ btn.addEventListener('click', event => {
 // eğer true alırsa Capturing e döner ve dıştan içe uygular.
 // tüm bu olaylara PROPAGATION denir. event.stopPropagation() ile bu zincirleme event dışındakiler engellenir
 // mouseenter, drag bubling yapmaz o yüzden stopPropagation yapmaya gerek yoktur.
+//
+// list itemlara birden fazla event lis eklemek sıkıntılı olabilir
+// bunun daha efektif bir yolu var. ul ' e event lis eklenmesine rağmen li ı event.target olarak
+// kabul eder. yani tıklama ile event.target ı lowest possible element olarak alır.
+// karmaşık yapılarda bu sıkıntılı olabilir. örn li içince h2/div/p falan varsa. tıklanılan elemanı alır
+// bunun için closest() kullanabiliriz. element.closest('hedef element ismi') eğer kendisini bulmak istiyorsak
+// kendisini de seçer. mesela li.closest('li'); kendisini seçer. bu uygulamaya event delegation denir
+//
+// click()  submit() ile event lis ları programatically çağırabiliriz
+//
+// event lis de arrow function da "this" window 'u temsil eder
+// fuction keyword ile tanımlanmışlarda "this" currentTarget'ı temsil eder. yani event lis atandığı elemanı
