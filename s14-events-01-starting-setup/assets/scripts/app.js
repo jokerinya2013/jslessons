@@ -84,6 +84,7 @@ class ProjectItem {
     this.updateProjectListsHandler = updateProjectListsFunction;
     this.connectMoreInfoButton();
     this.connectSwitchButton(type);
+    this.connectDrag(); // ilk oluşturulduğunda eklensin diye burada çağırdım
   }
 
   showMoreInfoHandler() {
@@ -101,6 +102,20 @@ class ProjectItem {
     );
     tooltip.attach();
     this.hasActiveTooltip = true;
+  }
+  // 1 html 2 burası
+  // 6 da burada
+  connectDrag() {
+    const item = document.getElementById(this.id);
+    item.addEventListener('dragstart', event => {
+      event.dataTransfer.setData('text/plain', this.id); //mdn den ayrıntılarına bakılabilir
+      event.dataTransfer.effectAllowed = 'move'; //mdn den ayrıntılarına bakılabilir
+    });
+
+    // 6
+    item.addEventListener('dragend', event => {
+      console.log(event);
+    });
   }
 
   connectMoreInfoButton() {
@@ -140,6 +155,57 @@ class ProjectList {
       );
     }
     console.log(this.projects);
+    this.connectDroppable(); // yine ilk oluşturmada çalıştırsın istiyoruz
+  }
+  // 3
+  connectDroppable() {
+    const list = document.querySelector(`#${this.type}-projects ul`); // ul i seçtik
+    // dragenter optional
+    list.addEventListener('dragenter', event => {
+      if (event.dataTransfer.types[0] === 'text/plain') {
+        //burada ektra kontrol yapabiliriz demek için koydu. burada dataya ulaşamayız.
+        //sadece types larına ulaşabiliriz
+        list.parentElement.classList.add('droppable'); //sectiona bir class ekliyoruz
+        event.preventDefault();
+      }
+    });
+    // dragover zorunlu. preventDefault yapacağız
+    list.addEventListener('dragover', event => {
+      if (event.dataTransfer.types[0] === 'text/plain') {
+        event.preventDefault();
+      }
+    });
+
+    // 4 dragleave li ul yi terkedince styling yapalım diye;
+    list.addEventListener('dragleave', event => {
+      // eğer list item i terketmişsem classı kaldır yaptıkk.
+      // burada list kendisini seçiyor aslında
+      if (
+        //firefox
+        event.relatedTarget.closest &&
+        event.relatedTarget.closest(`#${this.type}-projects ul`) !== list
+      ) {
+        list.parentElement.classList.remove('droppable');
+      }
+    });
+
+    // 5.drop
+    list.addEventListener('drop', event => {
+      event.preventDefault(); // for firefox
+      const prjId = event.dataTransfer.getData('text/plain'); //aynı anda birden fazla secemem
+      if (this.projects.find(p => prjId === p.id)) {
+        return; // eğer li, ayrıldığı ul içindeyse hiç bir şey yapma
+      } // aynı instance da ise yani
+      //şimdi ayrıntılı kısım burada..
+      // şuan içinde bulunduğumuz instancedan finish buttonuna tıklanmış gibi yapacağız.
+      //yada diğer insance için function taşıyacağız. bu zor tabi.o yüzden button yolu yapacağız
+      document
+        .getElementById(prjId)
+        .querySelector('button:last-of-type')
+        .click();
+      list.parentElement.classList.remove('droppable');
+      // event.preventDefault(); //not required
+    });
   }
 
   setSwitchHandlerFunction(switchHandlerFunction) {
@@ -171,13 +237,13 @@ class App {
       activeProjectsList.addProject.bind(activeProjectsList)
     );
 
-    const timerId = setTimeout(this.startAnalytics, 3000);
+    // const timerId = setTimeout(this.startAnalytics, 3000);
 
-    document
-      .getElementById('stop-analytics-btn')
-      .addEventListener('click', () => {
-        clearTimeout(timerId);
-      });
+    // document
+    //   .getElementById('stop-analytics-btn')
+    //   .addEventListener('click', () => {
+    //     clearTimeout(timerId);
+    //   }); //timerı durdurduk..
   }
 
   static startAnalytics() {
@@ -189,3 +255,22 @@ class App {
 }
 
 App.init();
+
+// Notlar(Drag and Drop)
+// 1.make elements "draggable",
+// 2.Listen "dragstart" event,
+// 3.Accept drag with "dragenter" and "dragover". IMPORTANT add preventDefault()
+// 4.(optional) For Styling: listen to "dragleave"
+// 5.Listen to "drop" event and update data/ui
+// 6.(optional) "dragend" event and update data/ui
+//
+// 1. html add attribute to element draggable="true"
+// 2. element.addEventListener('dragstart')--> ile elmanın seçildiği js e bildirilir
+//  bu aşamada event.dataTransfer.setData('tür', 'bilgi') şeklinde tanımlama yaparız
+//  event.dateTransfer.effectAllowed = 'move' yaparız. yani tamamen element i taşıyacağız
+// 3. drop area belirleyeceğiz. genelde bu parent element olur. preventDefault burada..
+//  "dragenter" ve "dragover" ı bu aşamada yapıyoruz. dragenter optional ama diğeri zorunlu
+// 4. eleman ayrıldığı zaman styling yapabilmek için "dragleave" belirliyoruz
+// 5. drop element
+// 6. dragend işlem tamamlanınca neler oluyor ona bakalım
+//  event.dataTransef.dropEffect = 'none' ise işlem olmadı demektir.
