@@ -1,0 +1,31 @@
+Since JavaScript is single-threaded you will very often write asynchronous code 
+in order to avoid blocking the code execution when a task will take a little longer.
+
+Actually asynchronous programming in JavaScript can be very intuitive, since it is like real life. 
+This well-known analogy might help:
+
+You're the cook in a restaurant. An order comes in for eggs and toast.
+
+● Synchronous programming:
+
+You cook the eggs first, waiting until these are ready (doing nothing else in the meantime), and 
+afterwards you will cook the toast (again doing nothing else during this time).
+
+● Asynchronous programming (single-threaded):
+
+You start boiling the eggs, setting a timer. 
+And immediately after this you start the toasting, setting a timer as well. 
+While both is going on in the background, you can perform other work, e.g. cleaning the kitchen. 
+When the timers go off you take the eggs off the heat and the toast out of the toaster and serve them.
+
+
+
+BTW:
+
+In other programming languages which are multi-threaded, the same would be done like this instead:
+
+● Asynchronous, multi-threaded:
+
+You hire two more cooks, one to boil eggs and one to toast toasts, so that you can perform other work. 
+In this case there is the problem of coordinating the cooks so that they do not conflict with each other in the kitchen when sharing resources. 
+And you have to pay them.

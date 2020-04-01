@@ -180,3 +180,44 @@ function arkadaslarıGetir(şahıs) {
 
 console.log(arkadaslarıGetir(jokerinya));
 //  ["Afra", "Esra", "Azra", "Leyla", "muhammed", "furkan", "zehra"]
+
+// Recursiona bir bir ek daha
+const ali = {
+  name: 'ali',
+  arkadaş: [
+    {
+      name: 'kemal',
+      arkadaş: [
+        {
+          name: 'suzan',
+          arkadaş: [
+            {
+              name: 'emel',
+              arkadaş: [
+                {
+                  name: 'kamil'
+                },
+                { name: 'ali' }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+function findFriends(eleman) {
+  const arkadaşlar = [];
+  if (!eleman.arkadaş) {
+    return [];
+  }
+
+  for (const bro of eleman.arkadaş) {
+    // arkadaşlar.push(bro.name); sadece bunu da kullanabilirsin. gerisi hayal gücü
+    arkadaşlar.push(`${eleman.name}'in arkdaşı-> ${bro.name}`);
+    arkadaşlar.push(...findFriends(bro));
+  }
+  return arkadaşlar;
+}
+console.log(findFriends(ali));
