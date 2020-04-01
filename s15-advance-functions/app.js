@@ -73,11 +73,12 @@ function powerOf(x, n) {
   // }
   // return x * powerOf(x, n - 1);
 
-  return n === 1 ? x : powerOf(x, n - 1); // kısa yazılışı
+  return n === 1 ? x : x * powerOf(x, n - 1); // kısa yazılışı
 }
 
 console.log(powerOf(2, 3)); // 8
 
+// Recursion complicated usage VERY IMPORTANT
 const myself = {
   name: 'Max',
   friends: [
@@ -85,7 +86,17 @@ const myself = {
       name: 'Manuel',
       friends: [
         {
-          name: 'Chris'
+          name: 'Chris',
+          friends: [
+            {
+              name: 'Ali',
+              friends: [
+                {
+                  name: 'zeynep'
+                }
+              ]
+            }
+          ]
         }
       ]
     },
@@ -93,8 +104,79 @@ const myself = {
   ]
 };
 
+function getFriendNames(person) {
+  const collectedNames = [];
+
+  if (!person.friends) {
+    return []; //person un arkadaşı yoksa geri dön demek.. empty array dönmesi önemli
+  }
+
+  for (const friend of person.friends) {
+    collectedNames.push(friend.name); // ilk bi ismi al bakayım..
+    collectedNames.push(getFriendNames(friend)); // diğer itemın yanına bu fonksu tekrarla
+  }
+
+  return collectedNames;
+}
+
+console.log(getFriendNames(myself));
+
+// ["Manuel", "Chris", "Ali", "zeynep", "Julia"]
+
 // Notlar
 // side effect olmayan func kullanmaya çalış
 // factory func için func içinde func kullanmak demektir aslında
 // Actually every function in javascript is a CLOSURE
 //  recursion ====> yineleme
+// çok önemli data yinelemelerinde, exit conditionu muhakkak koymak lazım..
+
+const jokerinya = {
+  isim: 'ibro',
+  arkadasları: [
+    {
+      isim: 'Afra',
+      arkadasları: [
+        {
+          isim: 'Esra'
+        },
+        {
+          isim: 'Azra',
+          arkadasları: [
+            {
+              isim: 'Leyla'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      isim: 'muhammed',
+      arkadasları: [
+        {
+          isim: 'furkan'
+        },
+        {
+          isim: 'zehra'
+        }
+      ]
+    }
+  ]
+};
+
+function arkadaslarıGetir(şahıs) {
+  const toplananİsimler = [];
+
+  if (!şahıs.arkadasları) {
+    return []; // şahıs arkadaşları falsy ise boş arrayı dönmek önemli
+  }
+
+  for (const arkadas of şahıs.arkadasları) {
+    toplananİsimler.push(arkadas.isim);
+    toplananİsimler.push(...arkadaslarıGetir(arkadas));
+  }
+
+  return toplananİsimler;
+}
+
+console.log(arkadaslarıGetir(jokerinya));
+//  ["Afra", "Esra", "Azra", "Leyla", "muhammed", "furkan", "zehra"]
