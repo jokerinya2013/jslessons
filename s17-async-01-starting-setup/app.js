@@ -1,5 +1,21 @@
 const button = document.querySelector('button');
 const output = document.querySelector('p');
+
+const getPosition = opts => {
+  const promise = new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      success => {
+        resolve(success); // geolocationın successini, promise in resolve una koyduk
+      },
+      error => {
+        reject(error); // aşağıdaki err mesajı oldu
+      },
+      opts
+    );
+  });
+  return promise;
+};
+
 //  yeni promise yapımı
 const setTimer = duration => {
   const promise = new Promise((resolve, reject) => {
@@ -11,20 +27,23 @@ const setTimer = duration => {
 };
 
 function trackUserHandler() {
-  navigator.geolocation.getCurrentPosition(
-    posData => {
-      setTimer(2000).then(data => {
-        console.log(data, posData);
-      });
-    },
-    error => {
-      console.log(error);
-    }
-  );
-  setTimer(1000).then(() => {
-    console.log('Timer done!');
-  });
-  console.log('Getting position...'); // burası her zaman daha önce çalıştırılır
+  let positionData;
+  getPosition()
+    .then(posData => {
+      positionData = posData;
+      return setTimer(2000);
+    })
+    .catch(err => {
+      console.log(err); // catch ın nereye koyulduğu önemli değildir. hata mesajı verir.
+      return 'on we go...'; //  kod akışını durdumak için sona koymak gerekir
+    })
+    .then(data => {
+      console.log(data, positionData); //data bir üst adımdaki return edilen değer oluyor
+    });
+  // setTimer(1000).then(() => {
+  //   console.log('Timer done!');
+  // });
+  // console.log('Getting position...'); // burası her zaman daha önce çalıştırılır
   // diğerleri ne kadar hızlı olursa olsunlar farketmez
 }
 
@@ -49,3 +68,52 @@ button.addEventListener('click', trackUserHandler);
 // bu arada tüm async funclarda Promise yapısını kullanamayız. örn setTimeout ve getCurrentPosition()
 // new Promise(func(resolve, reject)) constructor func çalıştırmak üzere iki deger alan bir func alır
 // isimleri genelde resolve ve reject olur ama istersen başka isimde verebilirsin
+//
+//promiseYapılmışFunc().then(data=>{return sth}).then(data=>{do ljşljşlkj}) ikinci thendeki
+// data ilkinden gelen sth
+// catch() yapsını herhangi bir yere koyabiliriz ama akışı durdurmak istiyorsak sona koymalıyız.
+// çünkü aksi halde kod akışı ve uygulaması devam eder
+const somePromiseCreatingCode = () => {
+  const promise = new Promise((resolve, reject) => {
+    resolve();
+    reject();
+  });
+  return promise;
+};
+somePromiseCreatingCode()
+  .then(firstResult => {
+    return 'done with first promise';
+  })
+  .catch(err => {
+    // would handle any errors thrown before
+    // implicitly returns a new promise - just like then()
+  })
+  .finally(() => {
+    // the promise is settled now - finally() will NOT return a new promise!
+    // you can do final cleanup work here
+  });
+
+const myButton = document.getElementById('my-button');
+
+const deneme = new Promise((resolve, reject) => {
+  resolve({ isim: 'data', yer: 'Promise içi' });
+  // setTimeout(() => {}, 2000);
+  reject('Olmadı gardaş!');
+});
+
+const yaz = () => {
+  deneme
+    .then(data => {
+      // console.log(data.yer, data.isim);
+      console.log('Bu yaz Fonksiyonu');
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
+
+myButton.addEventListener('click', yaz);
+
+// promise yapısını async uygulama için kullanıyoruz.
+// data yapısını kullanmak zorunda değiliz..
+// setTimeout u sanki server a ulaşıyormuş gibi bir simülasyon için kullandık.
