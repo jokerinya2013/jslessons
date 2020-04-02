@@ -26,26 +26,45 @@ const setTimer = duration => {
   return promise;
 };
 
-function trackUserHandler() {
-  let positionData;
-  getPosition()
-    .then(posData => {
-      positionData = posData;
-      return setTimer(2000);
-    })
-    .catch(err => {
-      console.log(err); // catch ın nereye koyulduğu önemli değildir. hata mesajı verir.
-      return 'on we go...'; //  kod akışını durdumak için sona koymak gerekir
-    })
-    .then(data => {
-      console.log(data, positionData); //data bir üst adımdaki return edilen değer oluyor
-    });
-  // setTimer(1000).then(() => {
-  //   console.log('Timer done!');
+async function trackUserHandler() {
+  // let positionData;
+  let posData, timerData;
+  try {
+    posData = await getPosition();
+    timerData = await setTimer(2000);
+  } catch (error) {
+    console.log(error);
+  }
+  console.log(timerData, posData);
+
+  // .then(posData => {
+  //   positionData = posData;
+  //   return setTimer(2000);
+  // })
+  // .catch(err => {
+  //   console.log(err); // catch ın nereye koyulduğu önemli değildir. hata mesajı verir.
+  //   return 'on we go...'; //  kod akışını durdumak için sona koymak gerekir
+  // })
+  // .then(data => {
+  //   console.log(data, positionData); //data bir üst adımdaki return edilen değer oluyor
   // });
-  // console.log('Getting position...'); // burası her zaman daha önce çalıştırılır
-  // diğerleri ne kadar hızlı olursa olsunlar farketmez
+  setTimer(1000).then(() => {
+    console.log('Timer done!');
+  });
+  console.log('Getting position...'); // async/await hariç burası her zaman daha önce çalıştırılır
 }
+
+// Promise.race([getPosition(), setTimer(1000)]).then(data => {
+//   console.log(data);
+// }); // en hızlıyı döner.
+
+// Promise.all([getPosition(), setTimer(1000)]).then(promisesData => {
+//   console.log(promisesData);
+// }); // hepsini döner. hata olursa ilk hatada çıkar ve onu döner
+
+Promise.allSettled([getPosition(), setTimer(1000)]).then(data => {
+  console.log(data); // durumlarına göre bir array döner
+});
 
 button.addEventListener('click', trackUserHandler);
 
@@ -73,6 +92,21 @@ button.addEventListener('click', trackUserHandler);
 // data ilkinden gelen sth
 // catch() yapsını herhangi bir yere koyabiliriz ama akışı durdurmak istiyorsak sona koymalıyız.
 // çünkü aksi halde kod akışı ve uygulaması devam eder
+//
+// async ve await yapısı sadece FUNCTION da kullanılır
+// declaration için ---> async function name(){}
+// expression için ---> const name = async () =>{} olarak kullanılır
+// async eklenir eklenmez function promise return eder
+// await herhangi bir PROMİSE önüne eklenir..
+// async büyük bir promise oluşturur. func içindeki promiseleri ona dahil eder
+// daha kısa kod yazmayı sağlar. error handling olarak eksiktir fakat bunu
+// try/catch ile kapatabiliriz. max çok tavsiye etmiyor yine de
+//
+//
+// Promise.race(arrayofpromises).then(fastestpromiseReturingdata) şeklinde çalışır. Sadece
+// hızlı dönenle ilgilenir
+//
+
 const somePromiseCreatingCode = () => {
   const promise = new Promise((resolve, reject) => {
     resolve();
@@ -117,3 +151,68 @@ myButton.addEventListener('click', yaz);
 // promise yapısını async uygulama için kullanıyoruz.
 // data yapısını kullanmak zorunda değiliz..
 // setTimeout u sanki server a ulaşıyormuş gibi bir simülasyon için kullandık.
+
+const otherButton = document.getElementById('my-other-button');
+
+const promiseYap = () => {
+  const promise = new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      success => {
+        resolve(success);
+      },
+      error => {
+        reject(error);
+      }
+    );
+  });
+  return promise;
+};
+
+const consoleYaz = () => {
+  promiseYap()
+    .then(data => {
+      console.log('Pozisyonum: ', data);
+    })
+    .catch(err => {
+      console.log('Hata: ', err.message);
+    });
+};
+
+otherButton.addEventListener('click', consoleYaz);
+// burası normal promise yapısı
+
+const asyncAwaitBtn = document.getElementById('my-aync-button');
+
+const asyncIcınPromiseYap = () => {
+  const promise = new Promise((resolve, reject) => {
+    navigator.geolocation.getCurrentPosition(
+      success => {
+        resolve(success);
+      },
+      error => {
+        reject(error);
+      }
+    );
+  });
+  return promise;
+};
+
+const asyncIcınConsoleYaz = async () => {
+  // asyncIcınPromiseYap()
+  //   .then(data => {
+  //     console.log('Pozisyonum: ', data);
+  //   })
+  //   .catch(err => {
+  //     console.log('Hata: ', err.message);
+  //   });
+  // bu şekildeydi.. aşağıdakine çevirdik
+  try {
+    const konumAsync = await asyncIcınPromiseYap();
+    console.log('Pozisyonum: ', konumAsync);
+  } catch (error) {
+    console.log('Hata: ', error.message);
+  }
+  console.log('Bunu her halükarda yazar');
+};
+
+asyncAwaitBtn.addEventListener('click', asyncIcınConsoleYaz);
