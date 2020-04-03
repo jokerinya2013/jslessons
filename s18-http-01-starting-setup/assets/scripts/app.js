@@ -13,7 +13,16 @@ function sendHttpRequest(method, url, data) {
     xhr.responseType = 'json'; // burası olduğu için parse yapmaya gerek yok
 
     xhr.onload = function() {
-      resolve(xhr.response); // çünkü gelen data bu
+      if (xhr.status >= 200 && xhr.status < 300) {
+        //200ler başarılı demek
+        resolve(xhr.response); // çünkü gelen data bu
+      } else {
+        reject(new Error('Something went wrong'));
+      }
+    };
+
+    xhr.onerror = function() {
+      reject(new Error('Failed to send request')); // request failure
     };
 
     xhr.send(JSON.stringify(data)); // network->headers ın içinde gözlemleriz
@@ -24,18 +33,22 @@ function sendHttpRequest(method, url, data) {
 
 // .then den async e çevirdik, try catch koymadık ama nedense
 async function fetchPosts() {
-  const responseData = await sendHttpRequest(
-    'GET',
-    'https://jsonplaceholder.typicode.com/posts'
-  );
-  //   const listOfPosts = JSON.parse(responseData);
-  const listOfPosts = responseData;
-  for (const post of listOfPosts) {
-    const postEl = document.importNode(postTemplate.content, true); // içeriği kopyaladık
-    postEl.querySelector('h2').textContent = post.title.toUpperCase(); // bu içerikten p'yi seçiyoruz
-    postEl.querySelector('p').textContent = post.body; // bu içerikten p'yi seçiyoruz
-    postEl.querySelector('li').id = post.id; // li e id ekledik
-    listElement.append(postEl); // içeriği içine koyuyoruz
+  try {
+    const responseData = await sendHttpRequest(
+      'GET',
+      'https://jsonplaceholder.typicode.com/pos'
+    );
+    //   const listOfPosts = JSON.parse(responseData);
+    const listOfPosts = responseData;
+    for (const post of listOfPosts) {
+      const postEl = document.importNode(postTemplate.content, true); // içeriği kopyaladık
+      postEl.querySelector('h2').textContent = post.title.toUpperCase(); // bu içerikten p'yi seçiyoruz
+      postEl.querySelector('p').textContent = post.body; // bu içerikten p'yi seçiyoruz
+      postEl.querySelector('li').id = post.id; // li e id ekledik
+      listElement.append(postEl); // içeriği içine koyuyoruz
+    }
+  } catch (error) {
+    alert(error.message);
   }
 }
 
@@ -83,8 +96,13 @@ postList.addEventListener('click', event => {
 // OOP için kodu güncelledik
 // promise kullanacağız,
 // form içinde preventDefault kullandık..
-// tüm işlemlerde jsonplaceholder ın data yapısı ve methodlarına uygun davrandık
+//
+// tüm işlemlerde jsonplaceholder.com ın data yapısı ve methodlarına uygun davrandık
+//
 // her bir elemana bir event listener koymaktansa daha uygun olan yöntemi yapacağız
+// xhr.error otomatik olarak ortaya koymaz, gelen hata raporunu da bir response olarak kabul eder
+// ancak response request edemediği durumlarda uyarı verir.
+// bu yüzden xhr.error u response u check ederek koyuyoruz
 
 // aşağısı .then ile kullanımı
 // function fetchPosts() {
