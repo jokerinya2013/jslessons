@@ -5,33 +5,53 @@ const fetchButton = document.querySelector('#available-posts button');
 const postList = document.querySelector('#available-posts ul');
 
 function sendHttpRequest(method, url, data) {
-  const promise = new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
+  // const promise = new Promise((resolve, reject) => {
+  // const xhr = new XMLHttpRequest();
+  // xhr.setRequestHeader('Content-Type', 'application/json'); // header böyle ekleniyor
+  // xhr.open(method, url);
+  // xhr.responseType = 'json'; // burası olduğu için parse yapmaya gerek yok
+  // xhr.onload = function() {
+  //   if (xhr.status >= 200 && xhr.status < 300) {
+  //     //200ler başarılı demek
+  //     resolve(xhr.response); // çünkü gelen data bu
+  //   } else {
+  //     reject(new Error('Something went wrong'));
+  //   }
+  // };
+  // xhr.onerror = function() {
+  //   reject(new Error('Failed to send request')); // request failure
+  // };
+  // xhr.send(JSON.stringify(data)); // network->headers ın içinde gözlemleriz
+  // });
+  // return promise;
 
-    xhr.open(method, url);
-
-    xhr.responseType = 'json'; // burası olduğu için parse yapmaya gerek yok
-
-    xhr.onload = function() {
-      if (xhr.status >= 200 && xhr.status < 300) {
-        //200ler başarılı demek
-        resolve(xhr.response); // çünkü gelen data bu
+  // fetch API
+  // fetch(url); -->sadece url ile göndermek get requesti yapar. gelen bilgi stremed bilgidir
+  return fetch(url, {
+    method: method,
+    body: JSON.stringify(data), // json olmalı
+    headers: {
+      'Content-Type': 'application/json' //data type ı servere söylüyoruz
+    }
+  })
+    .then(response => {
+      // response.text()--> text e  ulaştırır; response.blob()--> file a ulaştırır
+      if (response.status >= 200 && response.status < 300) {
+        return response.json(); //--> js yapar ve bu da bir promise dir
       } else {
-        reject(new Error('Something went wrong'));
+        return response.json().then(errData => {
+          console.log(errData);
+          throw new Error('Something went wrong-server side');
+        });
       }
-    };
-
-    xhr.onerror = function() {
-      reject(new Error('Failed to send request')); // request failure
-    };
-
-    xhr.send(JSON.stringify(data)); // network->headers ın içinde gözlemleriz
-  });
-
-  return promise;
+    })
+    .catch(error => {
+      // aynı XMLHttpRequest te olduğu gibi burayada request failureda gelir
+      console.log(error);
+      throw new Error('Something went wrong-server side');
+    });
 }
 
-// .then den async e çevirdik, try catch koymadık ama nedense
 async function fetchPosts() {
   try {
     const responseData = await sendHttpRequest(
@@ -103,6 +123,16 @@ postList.addEventListener('click', event => {
 // xhr.error otomatik olarak ortaya koymaz, gelen hata raporunu da bir response olarak kabul eder
 // ancak response request edemediği durumlarda uyarı verir.
 // bu yüzden xhr.error u response u check ederek koyuyoruz
+//
+// fetch Api ile yapacağız şimdi de
+// fetch() bir fonksiyondur ve promise içinde kullanır. bu yüzden direk onu return edeceğiz
+// fetch(url) -> bu direk get yapar
+// fetch(url, obj).then(response) şeklindedir.
+// fetch(url, {method:'POST/GET .. VS.', data: JSON Olmak zorunda})
+//
+// Headers ekstra bilgi demek önemli olabilir
+//
+// formdata diye bir tür de var iletmek için very popular diyor
 
 // aşağısı .then ile kullanımı
 // function fetchPosts() {
