@@ -29,10 +29,11 @@ function sendHttpRequest(method, url, data) {
   // fetch(url); -->sadece url ile göndermek get requesti yapar. gelen bilgi stremed bilgidir
   return fetch(url, {
     method: method,
-    body: JSON.stringify(data), // json olmalı
-    headers: {
-      'Content-Type': 'application/json' //data type ı servere söylüyoruz
-    }
+    // body: JSON.stringify(data), // json olmalı
+    body: data
+    // headers: {
+    //   'Content-Type': 'application/json' //data type ı servere söylüyoruz
+    // }
   })
     .then(response => {
       // response.text()--> text e  ulaştırır; response.blob()--> file a ulaştırır
@@ -56,7 +57,7 @@ async function fetchPosts() {
   try {
     const responseData = await sendHttpRequest(
       'GET',
-      'https://jsonplaceholder.typicode.com/pos'
+      'https://jsonplaceholder.typicode.com/posts'
     );
     //   const listOfPosts = JSON.parse(responseData);
     const listOfPosts = responseData;
@@ -81,7 +82,17 @@ async function createPost(title, content) {
     userId
   };
 
-  sendHttpRequest('POST', 'https://jsonplaceholder.typicode.com/posts', post);
+  // formData yapacağız
+  const fd = new FormData(form); // yukarıdaki cost form 'u ekledik
+  // aşğıdaki gibi bireyssel olarak da ekleyebiliriz yada topluca da ekleyebiliriz
+  // hmtl de formun name attribute u muhakkak olmalı
+  // fd.append('title', title);
+  // fd.append('body', content);
+  fd.append('userId', userId);
+  // fd.append('someFile', 'photo path', 'photo.png (ismi yani)'); // dosya ekleyebiliriz
+
+  sendHttpRequest('POST', 'https://jsonplaceholder.typicode.com/posts', fd);
+  // sendHttpRequest('POST', 'https://jsonplaceholder.typicode.com/posts', post);
   console.log(post);
 }
 
@@ -132,7 +143,10 @@ postList.addEventListener('click', event => {
 //
 // Headers ekstra bilgi demek önemli olabilir
 //
-// formdata diye bir tür de var iletmek için very popular diyor
+// formdata diye bir tür de var iletmek için very popular diyor değiştireceğiz
+// çok iyi dosya ekleyebiliriz.
+// otomatik olarak form u parse etmesini de sağlayabiliriiz bunu yaparken serverin beklediği
+// isimleri html de name attribute u olarak eklememiz gerekir
 
 // aşağısı .then ile kullanımı
 // function fetchPosts() {
