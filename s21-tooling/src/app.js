@@ -1,7 +1,10 @@
+import * as _ from 'lodash';
 import { ProjectList } from './App/ProjectList';
 
 // eslint-disable-next-line no-undef
 globalThis.isim = 'İbrahim';
+
+console.log(_.difference([0, 1], [1, 2]));
 
 class App {
   static init() {
@@ -100,3 +103,10 @@ App.init();
 // her seferinde farklı isim almasını sağlayabiliriz. bu çok iyi bir özellik
 // bununla ilgili özelliği production config file a ekledik. [contenthash].js ismi ile
 // yanlız burada değişen sayıyı index.html de düzeltip öyle projemizi yüklemeliyiz
+//
+//
+
+//
+// bir library kullancağın zaman önce onu indiriyorsun
+// npm install --save lodash şeklinde.
+// kullandığımız dosyada import etmemiz gerekir
