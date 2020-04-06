@@ -1,10 +1,11 @@
-import { DOMHelper } from '../Utility/DOMHelper.js';
+import { DOMHelper } from '../Utility/DOMHelper';
 // import { Tooltip } from './Tooltip.js'; // bunu aşağıda alacağız. sadece tıklanınca yüklensin diye
 
 export class ProjectItem {
-  hasActiveTooltip = false;
+  // hasActiveTooltip = false;
 
   constructor(id, updateProjectListsFunction, type) {
+    this.hasActiveTooltip = false;
     this.id = id;
     this.updateProjectListsHandler = updateProjectListsFunction;
     this.connectMoreInfoButton();
@@ -18,7 +19,7 @@ export class ProjectItem {
     }
     const projectElement = document.getElementById(this.id);
     const tooltipText = projectElement.dataset.extraInfo;
-    import('./Tooltip.js').then((module) => {
+    import('./Tooltip').then(module => {
       const tooltip = new module.Tooltip(
         () => {
           this.hasActiveTooltip = false;
@@ -33,12 +34,12 @@ export class ProjectItem {
 
   connectDrag() {
     const item = document.getElementById(this.id);
-    item.addEventListener('dragstart', (event) => {
+    item.addEventListener('dragstart', event => {
       event.dataTransfer.setData('text/plain', this.id);
       event.dataTransfer.effectAllowed = 'move';
     });
 
-    item.addEventListener('dragend', (event) => {
+    item.addEventListener('dragend', event => {
       console.log(event);
     });
   }

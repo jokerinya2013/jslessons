@@ -1,13 +1,13 @@
-import { ProjectItem as PrjItem } from './ProjectItem.js';
+import { ProjectItem as PrjItem } from './ProjectItem';
 // import { DOMHelper } from '../Utility/DOMHelper.js'; // classı aldık
 // import { DOMHelper, moveElement } from '../Utility/DOMHelper.js'; // classı ve içerideki function ı aldık
-import * as DOMH from '../Utility/DOMHelper.js'; // herşeyi DOMH ismiyle aldık. DOMH.isim şeklinde kullancağız
+import * as DOMH from '../Utility/DOMHelper'; // herşeyi DOMH ismiyle aldık. DOMH.isim şeklinde kullancağız
 
 export class ProjectList {
-  projects = [];
+  // projects = [];
 
   constructor(type) {
-    console.log(globalThis.isim); // app.js e konmuş bir global variabledır.
+    this.projects = [];
     this.type = type;
     const prjItems = document.querySelectorAll(`#${type}-projects li`);
     for (const prjItem of prjItems) {
@@ -20,6 +20,7 @@ export class ProjectList {
   }
 
   connectDroppable() {
+    // console.log(globalThis);
     const list = document.querySelector(`#${this.type}-projects ul`);
 
     list.addEventListener('dragenter', (event) => {

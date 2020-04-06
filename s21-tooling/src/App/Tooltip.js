@@ -1,6 +1,6 @@
 // import { Component } from './Component.js'; export class Component olunca bu şekilde
 // import Cmp from './Component.js'; // export default olunca bu şekilde, ismi custom yapabiliriz
-import Cmp, { doSomething } from './Component.js'; // default ve non-default alma
+import Cmp, { doSomething } from './Component'; // default ve non-default alma
 
 console.log('Bu sadece bir sefer yazacak'); //istendiği kadar tooltip açılıp kapansın bu ilk seferde tek yazacak
 
@@ -9,13 +9,12 @@ export class Tooltip extends Cmp {
     super(hostElementId);
     this.closeNotifier = closeNotifierFunction;
     this.text = text;
+    this.closeTooltip = () => {
+      this.detach();
+      this.closeNotifier();
+    };
     this.create();
   }
-
-  closeTooltip = () => {
-    this.detach();
-    this.closeNotifier();
-  };
 
   create() {
     const tooltipElement = document.createElement('div');
