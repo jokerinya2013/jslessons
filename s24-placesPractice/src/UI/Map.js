@@ -50,11 +50,16 @@ export class Map {
     ).addTo(this.map);
     // const marker = L.marker(coords).addTo(this.map);
     let marker = L.marker(coords).addTo(this.map);
-    // marker.bindPopup('<b>Merhaba!</b><br>Ben Buradayım.').openPopup();
-    // işaretle yeri alıyor
+    marker.bindPopup('<b>Merhaba!</b><br>Ben Buradayım.').openPopup();
+
+    // aşağısı markerın yernini değiştirip koordinatını consola yazıyor. ayrı bir fonk
+    // yapılarak kullanılabilir de..
     this.map.on('click', (ev) => {
       marker.removeFrom(this.map);
-      marker = L.marker(ev.latlng).addTo(this.map);
+      marker = L.marker(ev.latlng)
+        .addTo(this.map)
+        .bindPopup('<b>Merhaba!</b><br>Ben Buradayım.')
+        .openPopup();
 
       const deneme = ev.latlng;
       console.log(deneme);

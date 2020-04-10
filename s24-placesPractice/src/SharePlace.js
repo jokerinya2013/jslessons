@@ -9,19 +9,41 @@ class PlaceFinder {
     this.shareBtn = document.getElementById('share-btn');
 
     locateUserBtn.addEventListener('click', this.locateUserHandler.bind(this)); //aşağıda arrow func kullandığımız için bind kullandık
-    // this.shareBtn.addEventListener('click');
+    this.shareBtn.addEventListener('click', this.sharePlaceHandler);
     adressForm.addEventListener('submit', this.findAddressHandler.bind(this));
+  }
+
+  // sharing
+  sharePlaceHandler() {
+    // clipboard desteği var mı kontrol ediyoruz
+    const sharedLinkInputElement = document.getElementById('share-link');
+    if (!navigator.clipboard) {
+      sharedLinkInputElement.select(); // ilgili elemanın içindekileri seçer
+      return;
+    }
+    // clipboarda kopyala
+    navigator.clipboard
+      .writeText(sharedLinkInputElement.value)
+      .then(() => {
+        alert('Copied into clipboard!');
+      })
+      .catch((err) => {
+        console.log(err);
+        sharedLinkInputElement.select(); // ilgili elemanın içindekileri seçer
+      });
   }
 
   // map
   selectPlace(coordinates, address) {
     // daha önce map açılmış mı onu kontrol et demek
+    // map ı coorinates ile render ediyoruz
     if (this.map) {
       this.map.update(coordinates);
     } else {
       this.map = new Map(coordinates);
     }
 
+    // input a adres ve coordinate bilgisi yazıyor
     this.shareBtn.disabled = false;
     const sharedLinkInputElement = document.getElementById('share-link');
     sharedLinkInputElement.value = `${location.origin}/my-place?address=${encodeURI(address)}&lat=${
@@ -29,6 +51,7 @@ class PlaceFinder {
     }&lng=${coordinates.lng}`;
   }
 
+  // get my location
   locateUserHandler() {
     if (!navigator.geolocation) {
       alert('Location feature is not available in your browser - please use a modern browser.');
@@ -53,6 +76,7 @@ class PlaceFinder {
     );
   }
 
+  // find with address
   async findAddressHandler(event) {
     event.preventDefault();
     const address = event.target.querySelector('input').value; // event.target form oluyor. yukarıda form submit olduğu için
@@ -84,3 +108,13 @@ new PlaceFinder();
 // import ederken .js koyma webpack ekleyecek onu
 //
 // google maps platform u ekleyeceğiz, google maps sdk ile arayıp, google platforms a girdik
+//
+// google maps ekleyemedim, leaflet mapbox ve nomatim kullandım.
+// program şu mantıkla çalışıyor
+// bir buton ile konumu buluyor(navigator API ile coordinat alıyor buradan Location js den address i getiriyor)
+// arama butonu ile addressten konumu buluyor (Location js vasıtasıyla yine yapıyor bunu)
+// doğal olarak her ikisinde de hem address hem coordinate bilgisi oluyor elimde.
+// set ile hem haritayı coordinata göre düzenliyor hem de input a bilgileri yazıyoruz
+// encodeURI method unu kullanmak önemli
+// clipboarda kopyalanan kodu CTRL - V ile url ye yapıştırıyoruz. olay bu
+//
