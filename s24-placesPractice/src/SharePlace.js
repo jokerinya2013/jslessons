@@ -42,13 +42,36 @@ class PlaceFinder {
     } else {
       this.map = new Map(coordinates);
     }
+    //nodejs bölümünde ekledik, json formatına getirmek ve keyleri doğru girmek önemli
+
+    fetch('http://localhost:3000/add-location', {
+      method: 'POST',
+      body: JSON.stringify({
+        address: address,
+        lat: coordinates.lat,
+        lng: coordinates.lng,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        const locationId = data.locId; //server 3000 den gelecek.location.jsden
+        this.shareBtn.disabled = false;
+        const sharedLinkInputElement = document.getElementById('share-link');
+        sharedLinkInputElement.value = `${location.origin}/my-place?location=${locationId}`;
+      });
 
     // input a adres ve coordinate bilgisi yazıyor
-    this.shareBtn.disabled = false;
-    const sharedLinkInputElement = document.getElementById('share-link');
-    sharedLinkInputElement.value = `${location.origin}/my-place?address=${encodeURI(address)}&lat=${
-      coordinates.lat
-    }&lng=${coordinates.lng}`;
+    // yukarıya taşıdık
+    // this.shareBtn.disabled = false;
+    // const sharedLinkInputElement = document.getElementById('share-link');
+    // sharedLinkInputElement.value = `${location.origin}/my-place?address=${encodeURI(address)}&lat=${
+    //   coordinates.lat
+    // }&lng=${coordinates.lng}`;
   }
 
   // get my location
