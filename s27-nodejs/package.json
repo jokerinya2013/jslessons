@@ -1,0 +1,16 @@
+{
+  "name": "s27-nodejs",
+  "version": "1.0.0",
+  "description": "Learn Sth New!",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jokerinya2013",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.0.2",
+    "express": "^4.17.1"
+  }
+}

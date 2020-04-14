@@ -1,28 +1,40 @@
-const http = require('http');
+const express = require('express');
+const bodyParser = require('body-parser');
 
-const server = http.createServer((request, response) => {
-  // request
-  let body = [];
-  request.on('data', (chunk) => {
-    body.push(chunk);
-  });
-  request.on('end', () => {
-    body = Buffer.concat(body).toString();
-    let userName = 'Unknown User';
-    if (body) {
-      userName = body.split('=')[1];
-    }
-    response.setHeader('Content-Type', 'text/html');
-    response.write(
-      `<h1>Hi ${userName}</h1><form method="POST" action="/"><input name="username" type="text" /><button type="submit">Send</button></form>`
-    );
-    response.end();
+const app = express();
+
+app.set('view engine', 'ejs'); // templateden sorumlu bu olsun diyoruz.ejs i yükledik
+app.set('views', 'views'); // set('views', 'dosya_ismi')
+
+app.use(bodyParser.urlencoded({ extended: false })); // buradaki türü yazarken header türüne göre getirir ancak..
+
+app.use((req, res, next) => {
+  res.setHeader('Content-Type', 'text/html');
+  next();
+});
+
+app.use((req, res, next) => {
+  const userName = req.body.username || 'Unknown User';
+  const entryOk = userName === 'Enes' ? 'You have authority' : '';
+  res.render('index', {
+    user: userName,
+    entryOk: entryOk,
   });
 });
 
-server.listen(3000);
+app.listen(3000);
 
 //    ========================
 // |||---------NOTLAR---------|||
 //    ========================
-// on, aynı addEventListener mantığında çalışır, on('data') , ('click') gibi işlem yapar
+// express olarak import ettiğimiz şey aslında bir function
+// app e atayıp kullanmaya başladık.
+// sıra önemli.. app.use() lara middleware deniyor
+// en sonuncuya kadar next() kullanmalıyız
+// gelen request i parse eden bir package kullanmalıyız. bu işimizi çok kolaylaştırır
+// npm install body-parser --save şeklinde yükleriz
+// html template dosyası yükleyip bunu dynamic şekilde şekillendireceğiz
+// npm install --save ejs ile yükledik
+// yukarıda app.set ile özelliklerini tanımlayıp, views klasörü içine bir index.ejs
+// dosyası oluşturduk, buradan bilgileri karşılaştırabiliyoruz.
+// şimdi daha önce hazırladığımız harita uygulamasında bunu kullanacağız.
