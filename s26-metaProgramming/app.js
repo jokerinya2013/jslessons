@@ -111,7 +111,9 @@ pCourse.rating = 5; // bunu yukarıda şarttan dolayı yapmayacak.
 pCourse.title = 'JaVaScRiPt'; // değişmiş değeri göreceğiz
 console.log(pCourse.title, pCourse.length, pCourse.rating); // JaVaScRiPt 0 NOT FOUND
 
-//============================================================================================
+//    ========================
+// |||---------NOTLAR---------|||
+//    ========================
 // Çok kullanmayacağımız özellikler
 // library yazanlar kullanır
 // Symbol() primitive dir ve uniqeness sağlar
