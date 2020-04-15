@@ -1,9 +1,11 @@
 import { Map } from '../src/UI/Map';
+import sanitizeHtml from 'sanitize-html'; // güvenlik gerekçesiyle eklendi
 class LoadedPlace {
   constructor(coordinates, address) {
     new Map(coordinates);
     const headerTitle = document.querySelector('header h1');
-    headerTitle.textContent = address;
+    headerTitle.textContent = sanitizeHtml(address);
+    // headerTitle.innerHTML = sanitizeHtml(address); // innerHTML kullanma
   }
 }
 
