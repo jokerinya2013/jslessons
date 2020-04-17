@@ -15,3 +15,4 @@ sonra sırasıla devtoolsdaki network, performans, memory, audit sekmelerini gez
 <!-- indirilen kodun ne kadarı kullanılıyor -->
 
 network sayfasındayken alttaki coverage göz atabilirsin
+sayfa sonundan renderingden paint flashing yaparak DOM güncellemelerini kontrol edebilirsin

@@ -1,32 +1,7 @@
-import { renderProducts } from './rendering';
+import { renderProducts, updateProducts } from './rendering';
+import { products as prods } from './products';
 
-let products = [
-  {
-    id: new Date('1/1/1970').toString(),
-    title: 'A Book',
-    price: 12.99
-  },
-  {
-    id: new Date('1/2/1970').toString(),
-    title: 'A Carpet',
-    price: 129.99
-  },
-  {
-    id: new Date('1/3/1970').toString(),
-    title: 'A Magic Broomstick',
-    price: 599.99
-  },
-  {
-    id: new Date('1/4/1970').toString(),
-    title: 'A Bottle',
-    price: 2.99
-  },
-  {
-    id: new Date('1/5/1970').toString(),
-    title: 'A T-Shirt',
-    price: 29.99
-  }
-];
+let products = prods;
 
 export function initProducts() {
   renderProducts(products, deleteProduct);
@@ -34,13 +9,16 @@ export function initProducts() {
 
 export function deleteProduct(prodId) {
   const updatedProducts = [];
+  let deletedProduct;
   for (const prod of products) {
     if (prod.id !== prodId) {
       updatedProducts.push(prod);
+    } else {
+      deletedProduct = prod;
     }
   }
   products = updatedProducts;
-  renderProducts(products, deleteProduct);
+  updateProducts(deletedProduct, prodId, deletedProduct, false);
 }
 
 export function addProduct(event) {
@@ -59,7 +37,7 @@ export function addProduct(event) {
   const newProduct = {
     id: new Date().toString(),
     title: title,
-    price: price
+    price: price,
   };
 
   products.unshift(newProduct);
