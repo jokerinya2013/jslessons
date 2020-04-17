@@ -18,7 +18,8 @@ const queryParams = url.searchParams; // key-value şeklinde ? den sonraki bilgi
 // }; // burada string gelecek bunu iki şekilde num yapabiliriz. yukarıda ikisi de var
 // const address = queryParams.get('address');
 const locId = queryParams.get('location');
-fetch('http://localhost:3000/location/' + locId)
+// fetch('http://localhost:3000/location/' + locId)
+fetch('https://map-location-trail.herokuapp.com/location/' + locId)
   .then((response) => {
     if (response.status === 404) {
       throw new Error('Could not find location!');

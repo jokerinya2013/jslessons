@@ -44,7 +44,8 @@ class PlaceFinder {
     }
     //nodejs bölümünde ekledik, json formatına getirmek ve keyleri doğru girmek önemli
 
-    fetch('http://localhost:3000/add-location', {
+    // fetch('http://localhost:3000/add-location', {
+    fetch('https://map-location-trail.herokuapp.com/add-location', {
       method: 'POST',
       body: JSON.stringify({
         address: address,
