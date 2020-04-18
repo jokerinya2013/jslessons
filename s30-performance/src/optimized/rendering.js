@@ -1,32 +1,38 @@
-export function renderProducts(products, deleteProductFn) {
-  const productListEl = document.getElementById('product-list');
-  productListEl.innerHTML = '';
-  products.forEach((product) => {
-    const newListEl = document.createElement('li');
-    const prodTitleEl = document.createElement('h2');
-    const prodPriceEl = document.createElement('p');
-    const prodDeleteButtonEl = document.createElement('button');
+const productListEl = document.getElementById('product-list');
 
-    prodTitleEl.innerHTML = product.title;
-    prodPriceEl.innerHTML = product.price;
-    prodDeleteButtonEl.innerHTML = 'DELETE';
+function createElement(product, prodId, deleteProductFn) {
+  const newListEl = document.createElement('li');
+  // Normalde aşağıdaki gibi yapmamak gerekir, sanitize etmek gerekir, çünkü emniyetli değil
+  newListEl.innerHTML = `
+    <h2>${product.title}</h2>
+    <p>${product.price}</p>
+  `;
+  const prodDeleteButtonEl = document.createElement('button');
+  prodDeleteButtonEl.textContent = 'DELETE';
+  newListEl.id = prodId;
+  prodDeleteButtonEl.addEventListener('click', deleteProductFn.bind(null, prodId));
+  newListEl.appendChild(prodDeleteButtonEl);
 
-    newListEl.id = product.id;
-
-    prodDeleteButtonEl.addEventListener('click', deleteProductFn.bind(null, product.id));
-
-    newListEl.appendChild(prodTitleEl);
-    newListEl.appendChild(prodPriceEl);
-    newListEl.appendChild(prodDeleteButtonEl);
-
-    productListEl.appendChild(newListEl);
-  });
+  return newListEl;
 }
 
-export function updateProducts(product, productId, deleteProductFn, isAdding) {
+export function renderProducts(products, deleteProductFn) {
+  productListEl.innerHTML = '';
+  const startTime = performance.now();
+  products.forEach((product) => {
+    const newListEl = createElement(product, product.id, deleteProductFn);
+    productListEl.appendChild(newListEl);
+  });
+  const endTime = performance.now();
+  console.log(endTime - startTime);
+}
+
+export function updateProducts(product, prodId, deleteProductFn, isAdding) {
   if (isAdding) {
+    const newProductEl = createElement(product, prodId, deleteProductFn);
+    productListEl.insertAdjacentElement('afterbegin', newProductEl);
   } else {
-    const productEl = document.getElementById(productId);
+    const productEl = document.getElementById(prodId);
     productEl.remove();
     // productEl.parentElement.removeChild(productEl);
   }

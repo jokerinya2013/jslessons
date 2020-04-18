@@ -16,3 +16,9 @@ sonra sırasıla devtoolsdaki network, performans, memory, audit sekmelerini gez
 
 network sayfasındayken alttaki coverage göz atabilirsin
 sayfa sonundan renderingden paint flashing yaparak DOM güncellemelerini kontrol edebilirsin
+
+getElementById is a bit faster than others
+
+<!-- loop olarak forEach pek hızlı değil -->
+
+performance.now() ile ölçüm yapılıyor
