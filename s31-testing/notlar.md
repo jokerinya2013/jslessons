@@ -8,3 +8,9 @@ fonksiyon class gibi tek ögeleri test etmeye yarar
 util js i test etmek için util.test.js isimli bir dosya oluşturduk
 const { generateText } = require('./util'); importu bu şekilde yaptık, başka türlü çalışmaz
 package.json da test kısmını "jest" diye değiştirdik.. (--watch) ile sürekli izlemesini sağlayabiliriz..
+integration test i de jest ile yaptık..
+ilgili kısımlara not yazacağım
+
+<!-- e2e testing için puppeteer i indirdik -->
+
+npm install --save-dev puppeteer ile
