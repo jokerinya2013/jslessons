@@ -1,3 +1,6 @@
+// BEST CASE: [5] => O(1) (Constant Time Complexity)
+// WORST CASE: [3, 5] => O(n)
+
 function getMin(numbers) {
   // [3, 1, 4]
   if (!numbers.length) {
@@ -18,9 +21,11 @@ function getMin(numbers) {
 
   return currentMinimum; // 1 execution
 }
-
 // T = n => Linear Time Complexity => O(n)
 
+// BEST CASE: [1, 3, 5] => O(n^2)
+// WORST CASE: [5, 3, 1] => O(n^2)
+// AVARAGE CASE: [?, ?, ?] => O(n^2)
 function getMin2(numbers) {
   if (!numbers.length) {
     throw new Error('Should not be an empty error');
