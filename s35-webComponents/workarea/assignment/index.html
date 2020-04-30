@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Web Components</title>
+    <script src="app.js"></script>
+  </head>
+  <body>
+    <div>
+      <p>
+        <assingment-button is-hidden="true">Burası başlangıçta gözükmeyecek</assingment-button>
+      </p>
+    </div>
+    <!-- slot kullanımı yukarıda işe yarıyor -->
+    <assingment-button is-hidden="false">Bu bilgi kısmı başlangıçta gözükecek</assingment-button>
+  </body>
+</html>
