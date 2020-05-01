@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="modal.js"></script>
+    <title>Web Components</title>
+  </head>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      font-family: sans-serif;
+    }
+
+    body {
+      margin: 2rem;
+    }
+  </style>
+  <body>
+    <jokerinya-modal>
+      <h1 slot="title">Please Confirm</h1>
+      <p>With your confirmation you agree to pay the full amount!</p>
+    </jokerinya-modal>
+    <p>Please confirm your choice.</p>
+    <button>Show Details & Confirm</button>
+  </body>
+  <script>
+    const button = document.querySelector('button');
+    const modal = document.querySelector('jokerinya-modal');
+
+    modal.addEventListener('confirm', () => {
+      console.log('Confirmed...');
+    });
+
+    modal.addEventListener('cancel', () => {
+      console.log('Declined...');
+    });
+
+    button.addEventListener('click', () => {
+      if (!this.isOpen) {
+        //   modal.setAttribute('opened', '');
+        modal.open();
+      }
+    });
+  </script>
+</html>
